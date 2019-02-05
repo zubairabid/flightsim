@@ -64,11 +64,21 @@ Ball::Ball(float x, float y, color_t color) {
     };
 
     GLfloat vbdata[this->vertices.size()*sizeof(glm::vec3)];
+    GLfloat g_color_buffer_data[this->vertices.size()*sizeof(glm::vec3)*3];
+    
     for (int i = 0; i < this->vertices.size(); i++) {
         vbdata[3*i] = this->vertices[i].x;
         vbdata[3*i+1] = this->vertices[i].y;
         vbdata[3*i+2] = this->vertices[i].z;
-        
+        g_color_buffer_data[9*i] = this->vertices[i].x;
+        g_color_buffer_data[9*i+1] = this->vertices[i].y;
+        g_color_buffer_data[9*i+2] = this->vertices[i].z;
+        g_color_buffer_data[9*i+3] = this->vertices[i].y;
+        g_color_buffer_data[9*i+4] = this->vertices[i].z;
+        g_color_buffer_data[9*i+5] = this->vertices[i].x;
+        g_color_buffer_data[9*i+6] = this->vertices[i].z;
+        g_color_buffer_data[9*i+7] = this->vertices[i].x;
+        g_color_buffer_data[9*i+8] = this->vertices[i].y;
     }
     std::cout << count << "\t" << this->vertices.size()*3 << std::endl;
     
@@ -88,12 +98,17 @@ Ball::Ball(float x, float y, color_t color) {
 	glBindBuffer(GL_ARRAY_BUFFER, this->uvbuffer);
     glBufferData(GL_ARRAY_BUFFER, this->uvs.size() * sizeof(glm::vec2), &this->uvs[0], GL_STATIC_DRAW);
 
+    // // GLuint colorbuffer;
+    glGenBuffers(1, &this->colorbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, this->colorbuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
+
 }
 
 void Ball::draw(glm::mat4 VP) {
     Matrices.model = glm::mat4(1.0f);
     glm::mat4 translate = glm::translate (this->position);    // glTranslatef
-    glm::mat4 rotate    = glm::rotate((float) (this->rotation * M_PI / 180.0f), glm::vec3(1, 0, 0));
+    glm::mat4 rotate    = glm::rotate((float) (this->rotation * M_PI / 180.0f), glm::vec3(0, 1, 0));
     // No need as coords centered at 0, 0, 0 of cube arouund which we waant to rotate
     // rotate          = rotate * glm::translate(glm::vec3(0, -0.6, 0));
     Matrices.model *= (translate * rotate);
@@ -111,7 +126,7 @@ void Ball::draw(glm::mat4 VP) {
     glBindBuffer(GL_ARRAY_BUFFER, this->vertexbuffer);
     glVertexAttribPointer(
         0,                  // attribute
-        vertices.size(),                  // size
+        3,                  // size
         GL_FLOAT,           // type
         GL_FALSE,           // normalized?
         0,                  // stride
@@ -123,7 +138,18 @@ void Ball::draw(glm::mat4 VP) {
     glBindBuffer(GL_ARRAY_BUFFER, this->uvbuffer);
     glVertexAttribPointer(
         1,                                // attribute
-        uvs.size(),                                // size
+        2,                                // size
+        GL_FLOAT,                         // type
+        GL_FALSE,                         // normalized?
+        0,                                // stride
+        (void*)0                          // array buffer offset
+    );
+
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+    glVertexAttribPointer(
+        1,                                // attribute. No particular reason for 1, but must match the layout in the shader.
+        3,                                // size
         GL_FLOAT,                         // type
         GL_FALSE,                         // normalized?
         0,                                // stride
@@ -145,7 +171,7 @@ void Ball::set_position(float x, float y) {
 }
 
 void Ball::tick() {
-    // this->rotation += speed;
+    this->rotation += speed;
     // this->position.x -= speed;
     // this->position.y -= speed;
 }

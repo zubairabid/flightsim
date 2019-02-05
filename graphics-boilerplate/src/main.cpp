@@ -36,7 +36,7 @@ void draw() {
     // Eye - Location of camera. Don't change unless you are sure!!
     // glm::vec3 eye ( 5*cos(camera_rotation_angle*M_PI/180.0f), 0, 5*sin(camera_rotation_angle*M_PI/180.0f) );
     
-    glm::vec3 eye (0, 100, -100);
+    glm::vec3 eye (0, 20, -100);
     
     // Target - Where is the camera looking at.  Don't change unless you are sure!!
     glm::vec3 target (0, 0, 0);
@@ -147,5 +147,5 @@ void reset_screen() {
     float bottom = screen_center_y - 4 / screen_zoom;
     float left   = screen_center_x - 4 / screen_zoom;
     float right  = screen_center_x + 4 / screen_zoom;
-    Matrices.projection = glm::perspective(glm::radians(10.0f), 1.0f/1.0f, 0.1f, 500.0f);
+    Matrices.projection = glm::perspective(glm::radians(15.0f), 1.0f/1.0f, 0.1f, 500.0f);
 }
