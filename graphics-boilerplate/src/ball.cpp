@@ -78,15 +78,15 @@ Ball::Ball(float x, float y, color_t color) {
 
 
 
-    // // GLuint vertexbuffer;
-	// glGenBuffers(1, &this->vertexbuffer);
-	// glBindBuffer(GL_ARRAY_BUFFER, this->vertexbuffer);
-	// glBufferData(GL_ARRAY_BUFFER, this->vertices.size() * sizeof(glm::vec3), &this->vertices[0], GL_STATIC_DRAW);
+    // GLuint vertexbuffer;
+	glGenBuffers(1, &this->vertexbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, this->vertexbuffer);
+	glBufferData(GL_ARRAY_BUFFER, this->vertices.size() * sizeof(glm::vec3), &this->vertices[0], GL_STATIC_DRAW);
 
-	// // GLuint uvbuffer;
-	// glGenBuffers(1, &this->uvbuffer);
-	// glBindBuffer(GL_ARRAY_BUFFER, this->uvbuffer);
-    // glBufferData(GL_ARRAY_BUFFER, this->uvs.size() * sizeof(glm::vec2), &this->uvs[0], GL_STATIC_DRAW);
+	// GLuint uvbuffer;
+	glGenBuffers(1, &this->uvbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, this->uvbuffer);
+    glBufferData(GL_ARRAY_BUFFER, this->uvs.size() * sizeof(glm::vec2), &this->uvs[0], GL_STATIC_DRAW);
 
 }
 
@@ -101,43 +101,43 @@ void Ball::draw(glm::mat4 VP) {
     glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
 
 
-    // // glActiveTexture(GL_TEXTURE0);
-    // // glBindTexture(GL_TEXTURE_2D, Texture);
-    // // // Set our "myTextureSampler" sampler to use Texture Unit 0
-    // // glUniform1i(TextureID, 0);
+    // glActiveTexture(GL_TEXTURE0);
+    // glBindTexture(GL_TEXTURE_2D, Texture);
+    // // Set our "myTextureSampler" sampler to use Texture Unit 0
+    // glUniform1i(TextureID, 0);
 
-    // // 1rst attribute buffer : vertices
-    // glEnableVertexAttribArray(0);
-    // glBindBuffer(GL_ARRAY_BUFFER, this->vertexbuffer);
-    // glVertexAttribPointer(
-    //     0,                  // attribute
-    //     vertices.size(),                  // size
-    //     GL_FLOAT,           // type
-    //     GL_FALSE,           // normalized?
-    //     0,                  // stride
-    //     (void*)0            // array buffer offset
-    // );
+    // 1rst attribute buffer : vertices
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vertexbuffer);
+    glVertexAttribPointer(
+        0,                  // attribute
+        vertices.size(),                  // size
+        GL_FLOAT,           // type
+        GL_FALSE,           // normalized?
+        0,                  // stride
+        (void*)0            // array buffer offset
+    );
 
-    // // 2nd attribute buffer : UVs
-    // glEnableVertexAttribArray(1);
-    // glBindBuffer(GL_ARRAY_BUFFER, this->uvbuffer);
-    // glVertexAttribPointer(
-    //     1,                                // attribute
-    //     uvs.size(),                                // size
-    //     GL_FLOAT,                         // type
-    //     GL_FALSE,                         // normalized?
-    //     0,                                // stride
-    //     (void*)0                          // array buffer offset
-    // );
+    // 2nd attribute buffer : UVs
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, this->uvbuffer);
+    glVertexAttribPointer(
+        1,                                // attribute
+        uvs.size(),                                // size
+        GL_FLOAT,                         // type
+        GL_FALSE,                         // normalized?
+        0,                                // stride
+        (void*)0                          // array buffer offset
+    );
 
-    // // Draw the triangle !
-    // glDrawArrays(GL_TRIANGLES, 0, this->vertices.size() );
+    // Draw the triangle !
+    glDrawArrays(GL_TRIANGLES, 0, this->vertices.size() );
 
-    // glDisableVertexAttribArray(0);
-    // glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
 
 
-    draw3DObject(this->object);
+    // draw3DObject(this->object);
 }
 
 void Ball::set_position(float x, float y) {
