@@ -170,9 +170,13 @@ void Ball::set_position(float x, float y) {
     this->position = glm::vec3(x, y, 0);
 }
 
-void Ball::tick() {
+void Ball::tick(int forward) {
     // this->rotation += speed;
     // this->position.x -= speed;
     // this->position.y -= speed;
+    if (forward == 1)
+        this->position.z += speed;
+    if (forward == -1) 
+        this->position.z -= speed;
 }
 
