@@ -145,16 +145,16 @@ void Ball::draw(glm::mat4 VP) {
         (void*)0                          // array buffer offset
     );
 
-    glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-    glVertexAttribPointer(
-        1,                                // attribute. No particular reason for 1, but must match the layout in the shader.
-        3,                                // size
-        GL_FLOAT,                         // type
-        GL_FALSE,                         // normalized?
-        0,                                // stride
-        (void*)0                          // array buffer offset
-    );
+    // glEnableVertexAttribArray(1);
+    // glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+    // glVertexAttribPointer(
+    //     1,                                // attribute. No particular reason for 1, but must match the layout in the shader.
+    //     3,                                // size
+    //     GL_FLOAT,                         // type
+    //     GL_FALSE,                         // normalized?
+    //     0,                                // stride
+    //     (void*)0                          // array buffer offset
+    // );
 
     // Draw the triangle !
     glDrawArrays(GL_TRIANGLES, 0, this->vertices.size() );
@@ -171,7 +171,7 @@ void Ball::set_position(float x, float y) {
 }
 
 void Ball::tick() {
-    this->rotation += speed;
+    // this->rotation += speed;
     // this->position.x -= speed;
     // this->position.y -= speed;
 }
