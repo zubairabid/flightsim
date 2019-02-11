@@ -12,26 +12,16 @@ Ball::Ball(float x, float y, color_t color) {
     this->rotation = 0;
     speed = 1;
 
-    // std::vector< glm::vec3 > vertices;
-    // std::vector< glm::vec2 > uvs;
-    // std::vector< glm::vec3 > normals; // Won't be used at the moment.
-
     this->Texture = loadDDS("../../uvmap.DDS");
     this->TextureID = glGetUniformLocation(programID, "myTextureSampler");
 
-
     std::cout << "About to load\n";
     bool res = loadOBJ("../../plane3_1.obj", this->vertices, this->uvs, this->normals);
-    int count = 0;
-    for (int i = 0; i < this->vertices.size(); i++) {
-        // std::cout << vertices[i].x << std::endl;
-        // std::cout << glm::to_string(this->vertices[i]) << std::endl;
-        count += 3;
-    }
 
+
+    // NOT SURE WHY IT IS IMPORTANT BUT DOES NOT RENDER OTHERWISE
     GLfloat vbdata[this->vertices.size()*sizeof(glm::vec3)];
     // GLfloat g_color_buffer_data[this->vertices.size()*sizeof(glm::vec3)*3];
-    
     for (int i = 0; i < this->vertices.size(); i++) {
         vbdata[3*i] = this->vertices[i].x;
         vbdata[3*i+1] = this->vertices[i].y;

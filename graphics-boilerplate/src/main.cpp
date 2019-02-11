@@ -123,8 +123,8 @@ void initGL(GLFWwindow *window, int width, int height) {
 
 int main(int argc, char **argv) {
     srand(time(0));
-    int width  = 600;
-    int height = 600;
+    int width  = 700;
+    int height = 700;
 
     window = initGLFW(width, height);
 
