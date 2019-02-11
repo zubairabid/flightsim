@@ -2,7 +2,7 @@
 #include "timer.h"
 #include "ball.h"
 
-// #include "shader.hpp"
+#include "common/shader.hpp"
 // #include "texture.hpp"
 
 using namespace std;

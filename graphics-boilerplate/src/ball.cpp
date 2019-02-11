@@ -2,8 +2,10 @@
 #include "main.h"
 #include "objloader.hpp"
 // #include "shader.hpp"  
-// #include "texture.hpp"
+#include "texture.hpp"
 #include "glm/gtx/string_cast.hpp"
+
+extern GLuint programID;
 
 Ball::Ball(float x, float y, color_t color) {
     this->position = glm::vec3(x, y, 0);
@@ -13,74 +15,38 @@ Ball::Ball(float x, float y, color_t color) {
     // std::vector< glm::vec3 > vertices;
     // std::vector< glm::vec2 > uvs;
     // std::vector< glm::vec3 > normals; // Won't be used at the moment.
+
+    this->Texture = loadDDS("../../uvmap.DDS");
+    this->TextureID = glGetUniformLocation(programID, "myTextureSampler");
+
+
     std::cout << "About to load\n";
     bool res = loadOBJ("../../plane3_1.obj", this->vertices, this->uvs, this->normals);
     int count = 0;
     for (int i = 0; i < this->vertices.size(); i++) {
         // std::cout << vertices[i].x << std::endl;
-        std::cout << glm::to_string(this->vertices[i]) << std::endl;
+        // std::cout << glm::to_string(this->vertices[i]) << std::endl;
         count += 3;
     }
 
-    // Our vertices. Three consecutive floats give a 3D vertex; Three consecutive vertices give a triangle.
-    // A cube has 6 faces with 2 triangles each, so this makes 6*2=12 triangles, and 12*3 vertices
-    static const GLfloat vertex_buffer_data[] = {
-        -1.0f,-1.0f,-1.0f, // triangle 1 : begin
-        -1.0f,-1.0f, 1.0f,
-        -1.0f, 1.0f, 1.0f, // triangle 1 : end
-        1.0f, 1.0f,-1.0f, // triangle 2 : begin
-        -1.0f,-1.0f,-1.0f,
-        -1.0f, 1.0f,-1.0f, // triangle 2 : end
-        1.0f,-1.0f, 1.0f,
-        -1.0f,-1.0f,-1.0f,
-        1.0f,-1.0f,-1.0f,
-        1.0f, 1.0f,-1.0f,
-        1.0f,-1.0f,-1.0f,
-        -1.0f,-1.0f,-1.0f,
-        -1.0f,-1.0f,-1.0f,
-        -1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f,-1.0f,
-        1.0f,-1.0f, 1.0f,
-        -1.0f,-1.0f, 1.0f,
-        -1.0f,-1.0f,-1.0f,
-        -1.0f, 1.0f, 1.0f,
-        -1.0f,-1.0f, 1.0f,
-        1.0f,-1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f,-1.0f,-1.0f,
-        1.0f, 1.0f,-1.0f,
-        1.0f,-1.0f,-1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f,-1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f,-1.0f,
-        -1.0f, 1.0f,-1.0f,
-        1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f,-1.0f,
-        -1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f, 1.0f,
-        1.0f,-1.0f, 1.0f
-    };
-
     GLfloat vbdata[this->vertices.size()*sizeof(glm::vec3)];
-    GLfloat g_color_buffer_data[this->vertices.size()*sizeof(glm::vec3)*3];
+    // GLfloat g_color_buffer_data[this->vertices.size()*sizeof(glm::vec3)*3];
     
     for (int i = 0; i < this->vertices.size(); i++) {
         vbdata[3*i] = this->vertices[i].x;
         vbdata[3*i+1] = this->vertices[i].y;
         vbdata[3*i+2] = this->vertices[i].z;
-        g_color_buffer_data[9*i] = this->vertices[i].x;
-        g_color_buffer_data[9*i+1] = this->vertices[i].y;
-        g_color_buffer_data[9*i+2] = this->vertices[i].z;
-        g_color_buffer_data[9*i+3] = this->vertices[i].y;
-        g_color_buffer_data[9*i+4] = this->vertices[i].z;
-        g_color_buffer_data[9*i+5] = this->vertices[i].x;
-        g_color_buffer_data[9*i+6] = this->vertices[i].z;
-        g_color_buffer_data[9*i+7] = this->vertices[i].x;
-        g_color_buffer_data[9*i+8] = this->vertices[i].y;
+        // g_color_buffer_data[9*i] = this->vertices[i].x;
+        // g_color_buffer_data[9*i+1] = this->vertices[i].y;
+        // g_color_buffer_data[9*i+2] = this->vertices[i].z;
+        // g_color_buffer_data[9*i+3] = this->vertices[i].y;
+        // g_color_buffer_data[9*i+4] = this->vertices[i].z;
+        // g_color_buffer_data[9*i+5] = this->vertices[i].x;
+        // g_color_buffer_data[9*i+6] = this->vertices[i].z;
+        // g_color_buffer_data[9*i+7] = this->vertices[i].x;
+        // g_color_buffer_data[9*i+8] = this->vertices[i].y;
     }
-    std::cout << count << "\t" << this->vertices.size()*3 << std::endl;
+    // std::cout << count << "\t" << this->vertices.size()*3 << std::endl;
     
     std::cout << "Whooooaaaaah we are halfway there\n"; 
     this->object = create3DObject(GL_TRIANGLES, this->vertices.size()*3, vbdata, color, GL_FILL);
@@ -99,9 +65,9 @@ Ball::Ball(float x, float y, color_t color) {
     glBufferData(GL_ARRAY_BUFFER, this->uvs.size() * sizeof(glm::vec2), &this->uvs[0], GL_STATIC_DRAW);
 
     // // GLuint colorbuffer;
-    glGenBuffers(1, &this->colorbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, this->colorbuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
+    // glGenBuffers(1, &this->colorbuffer);
+    // glBindBuffer(GL_ARRAY_BUFFER, this->colorbuffer);
+    // glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
 
 }
 
@@ -116,10 +82,10 @@ void Ball::draw(glm::mat4 VP) {
     glUniformMatrix4fv(Matrices.MatrixID, 1, GL_FALSE, &MVP[0][0]);
 
 
-    // glActiveTexture(GL_TEXTURE0);
-    // glBindTexture(GL_TEXTURE_2D, Texture);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, Texture);
     // // Set our "myTextureSampler" sampler to use Texture Unit 0
-    // glUniform1i(TextureID, 0);
+    glUniform1i(this->TextureID, 0);
 
     // 1rst attribute buffer : vertices
     glEnableVertexAttribArray(0);
