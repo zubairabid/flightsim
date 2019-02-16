@@ -1,19 +1,18 @@
 #include "main.h"
 
-#ifndef BALL_H
-#define BALL_H
+#ifndef SEA_H
+#define SEA_H
 
 
-class Ball {
+class Sea {
 public:
-    Ball() {}
-    Ball(float x, float y, color_t color);
+    Sea() {}
+    Sea(float x, float y, float z, color_t color);
     glm::vec3 position;
     float rotation;
-    float roll;
     void draw(glm::mat4 VP);
     void set_position(float x, float y);
-    void tick(int forward, int tilt);
+    void tick();
     double speed;
 private:
     VAO *object;
@@ -22,9 +21,6 @@ private:
     GLuint colorbuffer;
     GLuint Texture;
     GLuint TextureID;
-    std::vector< glm::vec3 > vertices;
-    std::vector< glm::vec2 > uvs;
-    std::vector< glm::vec3 > normals;
 };
 
-#endif // BALL_H
+#endif // SEA_H

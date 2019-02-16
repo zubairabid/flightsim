@@ -1,6 +1,7 @@
 #include "main.h"
 #include "timer.h"
 #include "ball.h"
+#include "sea.h"
 
 #include "common/shader.hpp"
 // #include "texture.hpp"
@@ -16,8 +17,10 @@ GLFWwindow *window;
 **************************/
 
 Ball ball1;
+Sea see;
+
 int viewf = 0;
-int forward = 0;
+int forward = 0, tilt = 0;
 
 float screen_zoom = 1, screen_center_x = 0, screen_center_y = 0;
 float camera_rotation_angle = 0;
@@ -37,12 +40,52 @@ void draw() {
     // Eye - Location of camera. Don't change unless you are sure!!
     // glm::vec3 eye ( 5*cos(camera_rotation_angle*M_PI/180.0f), 0, 5*sin(camera_rotation_angle*M_PI/180.0f) );
     
-    glm::vec3 eye (viewf==0?0:80, viewf==0?20:20, viewf==0?-100:0);
+    float eye_x = 0, eye_y = 0, eye_z = 0;
+    float up_x = 0, up_y = 0, up_z = 0;
+
+
+    if (viewf == 0) {
+        eye_x = ball1.position.x-100*sin(camera_rotation_angle*M_PI/180.0f);
+        eye_y = ball1.position.y + 20;
+        eye_z = ball1.position.z-100*cos(camera_rotation_angle*M_PI/180.0f);
+
+        up_x = abs(1*sin(camera_rotation_angle*M_PI/180.0f));
+        up_y = 1;
+        up_z = abs(1*cos(camera_rotation_angle*M_PI/180.0f));
+
+        if ( camera_rotation_angle > 0 && ((((int)camera_rotation_angle % 360) >= 90 && ((int)camera_rotation_angle % 360) < 180) || (((int)camera_rotation_angle % 360) >= 270 && ((int)camera_rotation_angle % 360) < 360))  ) {
+            up_z = -up_z;
+            // up_x = -up_x;
+        }
+        if (camera_rotation_angle < 0) {
+            up_z = -up_z;
+        }
+        if (camera_rotation_angle < 0  && ((((int)abs(camera_rotation_angle) % 360) >= 90 && ((int)abs(camera_rotation_angle) % 360) < 180) || (((int)abs(camera_rotation_angle) % 360) >= 270 && ((int)abs(camera_rotation_angle) % 360) < 360))) {
+            // up_x = -up_x;
+            up_z = -up_z;
+        }
+    }
+    else {
+        eye_x = ball1.position.x+80;
+        eye_y = ball1.position.y + 20;
+        eye_z = ball1.position.z-0;
+
+        up_x = -1;
+        up_y = 1;
+        up_z = 0;
+    }
+
+    cout << "up_x = " << up_x << "\t up_y = " << up_y << "\t up_z = " << up_z << endl;
+    cout << "eye_x = " << eye_x << "\t eye_y = " << eye_y << "\t eye_z = " << eye_z << endl;
+
+    glm::vec3 eye (eye_x, eye_y, eye_z);
+    // glm::vec3 eye (viewf==0?0:80, viewf==0?20:20, viewf==0?-100:0);
     
     // Target - Where is the camera looking at.  Don't change unless you are sure!!
-    glm::vec3 target (0, 0, 0);
+    glm::vec3 target (ball1.position.x, ball1.position.y, ball1.position.z);
+    // glm::vec3 target (0, 0, 0);
     // Up - Up vector defines tilt of camera.  Don't change unless you are sure!!
-    glm::vec3 up (viewf==0?0:-1, viewf==0?1:1, viewf==0?1:0);
+    glm::vec3 up (up_x, up_y, up_z);
 
     // Compute Camera matrix (view)
     Matrices.view = glm::lookAt( eye, target, up ); // Rotating Camera for 3D
@@ -60,13 +103,17 @@ void draw() {
 
     // Scene render
     ball1.draw(VP);
+    see.draw(VP);
 }
 
 void tick_input(GLFWwindow *window) {
     int left  = glfwGetKey(window, GLFW_KEY_LEFT);
     int right = glfwGetKey(window, GLFW_KEY_RIGHT);
-    int up = glfwGetKey(window, GLFW_KEY_UP);
-    int down = glfwGetKey(window, GLFW_KEY_DOWN);
+    
+    int ahead = glfwGetKey(window, GLFW_KEY_W);
+    int behind = glfwGetKey(window, GLFW_KEY_S);
+    int tilt_left = glfwGetKey(window, GLFW_KEY_A);
+    int tilt_right = glfwGetKey(window, GLFW_KEY_D);
     
 
     if (left) {
@@ -76,19 +123,32 @@ void tick_input(GLFWwindow *window) {
         viewf = 0;
     }
     
-    if (up) {
+    if (ahead) {
         forward = 1;
     }
-    else if (down) {
+    else if (behind) {
         forward = -1;
     }
     else {
         forward = 0;
     }
+    
+    if (tilt_left) {
+        tilt = -1;
+    }
+    else if (tilt_right) {
+        tilt = 1;
+    }  
+    else {
+        tilt = 0;
+    }
+
 }
 
 void tick_elements() {
-    ball1.tick(forward);
+    ball1.tick(forward, tilt);
+    camera_rotation_angle = ball1.rotation;
+    cout << camera_rotation_angle << endl;
 }
 
 /* Initialize the OpenGL rendering properties */
@@ -97,7 +157,8 @@ void initGL(GLFWwindow *window, int width, int height) {
     /* Objects should be created before any other gl function and shaders */
     // Create the models
 
-    ball1       = Ball(0, 0, COLOR_RED);
+    ball1       = Ball(0, 0, COLOR_GREEN);
+    see         = Sea(0, -30, 0, COLOR_GREEN);
 
     // Create and compile our GLSL program from the shaders
     programID = LoadShaders("Sample_GL.vert", "Sample_GL.frag");
