@@ -2,6 +2,7 @@
 #include "timer.h"
 #include "ball.h"
 #include "sea.h"
+#include "ring.h"
 
 #include "common/shader.hpp"
 // #include "texture.hpp"
@@ -19,8 +20,11 @@ GLFWwindow *window;
 Ball ball1;
 Sea see;
 
+Ring rings[100];
+
+
 int viewf = 0;
-int forward = 0, tilt = 0;
+int forward = 0, tilt = 0, gravity = 0;
 
 float screen_zoom = 1, screen_center_x = 0, screen_center_y = 0;
 float camera_rotation_angle = 0;
@@ -75,8 +79,8 @@ void draw() {
         up_z = 0;
     }
 
-    cout << "up_x = " << up_x << "\t up_y = " << up_y << "\t up_z = " << up_z << endl;
-    cout << "eye_x = " << eye_x << "\t eye_y = " << eye_y << "\t eye_z = " << eye_z << endl;
+    // cout << "up_x = " << up_x << "\t up_y = " << up_y << "\t up_z = " << up_z << endl;
+    // cout << "eye_x = " << eye_x << "\t eye_y = " << eye_y << "\t eye_z = " << eye_z << endl;
 
     glm::vec3 eye (eye_x, eye_y, eye_z);
     // glm::vec3 eye (viewf==0?0:80, viewf==0?20:20, viewf==0?-100:0);
@@ -104,6 +108,9 @@ void draw() {
     // Scene render
     ball1.draw(VP);
     see.draw(VP);
+    for (int i = 0; i < 100; i++) {
+        rings[i].draw(VP);
+    }
 }
 
 void tick_input(GLFWwindow *window) {
@@ -114,7 +121,18 @@ void tick_input(GLFWwindow *window) {
     int behind = glfwGetKey(window, GLFW_KEY_S);
     int tilt_left = glfwGetKey(window, GLFW_KEY_A);
     int tilt_right = glfwGetKey(window, GLFW_KEY_D);
+
+    int move_up = glfwGetKey(window, GLFW_KEY_UP);
+    int move_down = glfwGetKey(window, GLFW_KEY_DOWN);
+
+    int click1 = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
     
+    
+    if (click1) {
+        cout << "clicked" << endl;
+    }
+
+
 
     if (left) {
         viewf = 1;
@@ -143,12 +161,23 @@ void tick_input(GLFWwindow *window) {
         tilt = 0;
     }
 
+    if (move_up) {
+        gravity = 1;
+    }
+    else if (move_down) {
+        gravity = -1;
+    }
+    else {
+        gravity = 0;
+    }
+
 }
 
 void tick_elements() {
-    ball1.tick(forward, tilt);
+    ball1.tick(forward, tilt, gravity);
     camera_rotation_angle = ball1.rotation;
-    cout << camera_rotation_angle << endl;
+    see.set_position(ball1.position.x, -60, ball1.position.z);
+    // cout << camera_rotation_angle << endl;
 }
 
 /* Initialize the OpenGL rendering properties */
@@ -158,7 +187,11 @@ void initGL(GLFWwindow *window, int width, int height) {
     // Create the models
 
     ball1       = Ball(0, 0, COLOR_GREEN);
-    see         = Sea(0, -30, 0, COLOR_GREEN);
+    see         = Sea(0, -60, 0, COLOR_GREEN);
+
+    for (int i = 0; i < 100; i++) {
+        rings[i] = Ring(i*10, i%2==0?10:0, -10*i, i, COLOR_BLACK);
+    }
 
     // Create and compile our GLSL program from the shaders
     programID = LoadShaders("Sample_GL.vert", "Sample_GL.frag");

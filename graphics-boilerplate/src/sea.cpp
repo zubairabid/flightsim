@@ -10,42 +10,42 @@ Sea::Sea(float x, float y, float z, color_t color) {
     // Our vertices. Three consecutive floats give a 3D vertex; Three consecutive vertices give a triangle.
     // A sea has 6 faces with 2 triangles each, so this makes 6*2=12 triangles, and 12*3 vertices
     static const GLfloat vertex_buffer_data[] = {
-        -150.0f,-1.0f,-150.0f, // triangle 1 : begin
-        -150.0f,-1.0f, 150.0f,
-        -150.0f, 1.0f, 150.0f, // triangle 1 : end
-        150.0f, 1.0f,-150.0f, // triangle 2 : begin
-        -150.0f,-1.0f,-150.0f,
-        -150.0f, 1.0f,-150.0f, // triangle 2 : end
-        150.0f,-1.0f, 150.0f,
-        -150.0f,-1.0f,-150.0f,
-        150.0f,-1.0f,-150.0f,
-        150.0f, 1.0f,-150.0f,
-        150.0f,-1.0f,-150.0f,
-        -150.0f,-1.0f,-150.0f,
-        -150.0f,-1.0f,-150.0f,
-        -150.0f, 1.0f, 150.0f,
-        -150.0f, 1.0f,-150.0f,
-        150.0f,-1.0f, 150.0f,
-        -150.0f,-1.0f, 150.0f,
-        -150.0f,-1.0f,-150.0f,
-        -150.0f, 1.0f, 150.0f,
-        -150.0f,-1.0f, 150.0f,
-        150.0f,-1.0f, 150.0f,
-        150.0f, 1.0f, 150.0f,
-        150.0f,-1.0f,-150.0f,
-        150.0f, 1.0f,-150.0f,
-        150.0f,-1.0f,-150.0f,
-        150.0f, 1.0f, 150.0f,
-        150.0f,-1.0f, 150.0f,
-        150.0f, 1.0f, 150.0f,
-        150.0f, 1.0f,-150.0f,
-        -150.0f, 1.0f,-150.0f,
-        150.0f, 1.0f, 150.0f,
-        -150.0f, 1.0f,-150.0f,
-        -150.0f, 1.0f, 150.0f,
-        150.0f, 1.0f, 150.0f,
-        -150.0f, 1.0f, 150.0f,
-        150.0f,-1.0f, 150.0f
+        -600.0f,-1.0f,-600.0f, // triangle 1 : begin
+        -600.0f,-1.0f, 600.0f,
+        -600.0f, 1.0f, 600.0f, // triangle 1 : end
+        600.0f, 1.0f,-600.0f, // triangle 2 : begin
+        -600.0f,-1.0f,-600.0f,
+        -600.0f, 1.0f,-600.0f, // triangle 2 : end
+        600.0f,-1.0f, 600.0f,
+        -600.0f,-1.0f,-600.0f,
+        600.0f,-1.0f,-600.0f,
+        600.0f, 1.0f,-600.0f,
+        600.0f,-1.0f,-600.0f,
+        -600.0f,-1.0f,-600.0f,
+        -600.0f,-1.0f,-600.0f,
+        -600.0f, 1.0f, 600.0f,
+        -600.0f, 1.0f,-600.0f,
+        600.0f,-1.0f, 600.0f,
+        -600.0f,-1.0f, 600.0f,
+        -600.0f,-1.0f,-600.0f,
+        -600.0f, 1.0f, 600.0f,
+        -600.0f,-1.0f, 600.0f,
+        600.0f,-1.0f, 600.0f,
+        600.0f, 1.0f, 600.0f,
+        600.0f,-1.0f,-600.0f,
+        600.0f, 1.0f,-600.0f,
+        600.0f,-1.0f,-600.0f,
+        600.0f, 1.0f, 600.0f,
+        600.0f,-1.0f, 600.0f,
+        600.0f, 1.0f, 600.0f,
+        600.0f, 1.0f,-600.0f,
+        -600.0f, 1.0f,-600.0f,
+        600.0f, 1.0f, 600.0f,
+        -600.0f, 1.0f,-600.0f,
+        -600.0f, 1.0f, 600.0f,
+        600.0f, 1.0f, 600.0f,
+        -600.0f, 1.0f, 600.0f,
+        600.0f,-1.0f, 600.0f
     };
 
     GLfloat vertex_colours[sizeof(vertex_buffer_data)*3];
@@ -105,8 +105,8 @@ void Sea::draw(glm::mat4 VP) {
     // draw3DObject(this->object);
 }
 
-void Sea::set_position(float x, float y) {
-    this->position = glm::vec3(x, y, 0);
+void Sea::set_position(float x, float y, float z) {
+    this->position = glm::vec3(x, y, z);
 }
 
 void Sea::tick() {

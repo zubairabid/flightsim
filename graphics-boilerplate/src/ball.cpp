@@ -11,6 +11,7 @@ Ball::Ball(float x, float y, color_t color) {
     this->position = glm::vec3(x, y, 0);
     this->rotation = 0;
     this->roll = 0;
+    this->gravity = -0.1;
     speed = 0.3;
 
     this->Texture = loadDDS("../../uvmap.DDS");
@@ -128,8 +129,20 @@ void Ball::set_position(float x, float y) {
     this->position = glm::vec3(x, y, 0);
 }
 
-void Ball::tick(int forward, int tilt) {
+void Ball::tick(int forward, int tilt, int up) {
     // std::cout << tilt << std::endl;
+
+    if (up == -1) {
+        this->gravity = -0.3;
+    }
+    else if (up == 1) {
+        this->gravity = 0.3;
+    }
+    else {
+        this->gravity = 0;
+    }
+    this->position.y += this->gravity;
+
 
     this->position.z += speed*cos(this->rotation*M_PI/180.0f);
     this->position.x += speed*sin(this->rotation*M_PI/180.0f);
