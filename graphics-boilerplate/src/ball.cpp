@@ -12,7 +12,8 @@ Ball::Ball(float x, float y, color_t color) {
     this->rotation = 0;
     this->roll = 0;
     this->gravity = -0.1;
-    speed = 0.3;
+    speed = 0.4;
+    this->limit = 5000;
 
     this->Texture = loadDDS("../../uvmap.DDS");
     this->TextureID = glGetUniformLocation(programID, "myTextureSampler");
@@ -143,7 +144,6 @@ void Ball::tick(int forward, int tilt, int up) {
     }
     this->position.y += this->gravity;
 
-
     this->position.z += speed*cos(this->rotation*M_PI/180.0f);
     this->position.x += speed*sin(this->rotation*M_PI/180.0f);
 
@@ -169,13 +169,18 @@ void Ball::tick(int forward, int tilt, int up) {
     // this->position.x -= speed;
     // this->position.y -= speed;
     if (forward == 1) {
-        this->speed = 2;
+        if (this->speed < 8)
+            this->speed += 0.2;
     }
     else if (forward == -1) {
-        this->speed = 0;
+        if (this->speed > 0)
+            this->speed -= 0.2;
     }
     else {
-        this->speed = 0.3;
+        if (this->speed > 0.4)
+            this->speed -= 0.2;
+        else 
+            this->speed += 0.2;
     }
 }
 

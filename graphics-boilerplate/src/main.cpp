@@ -3,6 +3,7 @@
 #include "ball.h"
 #include "sea.h"
 #include "ring.h"
+#include "volcano.h"
 
 #include "common/shader.hpp"
 // #include "texture.hpp"
@@ -21,6 +22,8 @@ Ball ball1;
 Sea see;
 
 Ring rings[100];
+Volcano volcanoes[100];
+
 
 
 int viewf = 0;
@@ -49,9 +52,9 @@ void draw() {
 
 
     if (viewf == 0) {
-        eye_x = ball1.position.x-100*sin(camera_rotation_angle*M_PI/180.0f);
+        eye_x = ball1.position.x-200*sin(camera_rotation_angle*M_PI/180.0f);
         eye_y = ball1.position.y + 20;
-        eye_z = ball1.position.z-100*cos(camera_rotation_angle*M_PI/180.0f);
+        eye_z = ball1.position.z-200*cos(camera_rotation_angle*M_PI/180.0f);
 
         up_x = abs(1*sin(camera_rotation_angle*M_PI/180.0f));
         up_y = 1;
@@ -110,6 +113,7 @@ void draw() {
     see.draw(VP);
     for (int i = 0; i < 100; i++) {
         rings[i].draw(VP);
+        volcanoes[i].draw(VP);
     }
 }
 
@@ -177,6 +181,7 @@ void tick_elements() {
     ball1.tick(forward, tilt, gravity);
     camera_rotation_angle = ball1.rotation;
     see.set_position(ball1.position.x, -60, ball1.position.z);
+    cout << "x: " << ball1.position.x << "\ty: " << ball1.position.y << "\tz: " << ball1.position.z << "\trot: " << camera_rotation_angle << endl;
     // cout << camera_rotation_angle << endl;
 }
 
@@ -190,7 +195,8 @@ void initGL(GLFWwindow *window, int width, int height) {
     see         = Sea(0, -60, 0, COLOR_GREEN);
 
     for (int i = 0; i < 100; i++) {
-        rings[i] = Ring(i*10, i%2==0?10:0, -10*i, i, COLOR_BLACK);
+        rings[i] = Ring(0, 0, 200*i, 10*i, COLOR_BLACK);
+        volcanoes[i] = Volcano(0, -60, 300*i, 10*i, COLOR_BLACK);
     }
 
     // Create and compile our GLSL program from the shaders

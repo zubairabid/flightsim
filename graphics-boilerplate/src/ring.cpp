@@ -8,8 +8,8 @@ Ring::Ring(float x, float y, float z, float rot, color_t color) {
 
     this->omega = 1.0f;
     this->theta = 0.0f;
-    this->radius = 20.0f;
-    this->dr = 4.0f;
+    this->radius = 10.0f;
+    this->dr = 1.0f;
 
 
     speed = 1;
@@ -67,8 +67,8 @@ Ring::Ring(float x, float y, float z, float rot, color_t color) {
 
     GLfloat vertex_colours[sizeof(vertex_buffer_data)*3];
     for (int i = 0; i < sizeof(vertex_buffer_data); i++) {
-        vertex_colours[3*i] = 0.5;
-        vertex_colours[3*i+1] = 0;
+        vertex_colours[3*i] = 1;
+        vertex_colours[3*i+1] = 0.84;
         vertex_colours[3*i+2] = 0;
     }
 
@@ -86,7 +86,7 @@ Ring::Ring(float x, float y, float z, float rot, color_t color) {
 void Ring::draw(glm::mat4 VP) {
     Matrices.model = glm::mat4(1.0f);
     glm::mat4 translate = glm::translate (this->position);    // glTranslatef
-    glm::mat4 rotate    = glm::rotate((float) (this->rotation * M_PI / 180.0f), glm::vec3(1, 0, 0));
+    glm::mat4 rotate    = glm::rotate((float) (this->rotation * M_PI / 180.0f), glm::vec3(0, 1, 0));
     // No need as coords centered at 0, 0, 0 of ring arouund which we waant to rotate
     // rotate          = rotate * glm::translate(glm::vec3(0, -0.6, 0));
     Matrices.model *= (translate * rotate);
@@ -115,7 +115,7 @@ void Ring::draw(glm::mat4 VP) {
         (void*)0                          // array buffer offset
     );
 
-    glDrawArrays(GL_TRIANGLES, 0, 12*3);
+    glDrawArrays(GL_TRIANGLES, 0, 6*360);
 
 
 

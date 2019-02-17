@@ -12,6 +12,7 @@ public:
     float rotation;
     float roll;
     float gravity;
+    float limit;
     void draw(glm::mat4 VP);
     void set_position(float x, float y);
     void tick(int forward, int tilt, int up);
