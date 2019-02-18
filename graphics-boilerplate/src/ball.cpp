@@ -169,7 +169,7 @@ void Ball::tick(int forward, int tilt, int up) {
     // this->position.x -= speed;
     // this->position.y -= speed;
     if (forward == 1) {
-        if (this->speed < 8)
+        if (this->speed < 4)
             this->speed += 0.2;
     }
     else if (forward == -1) {

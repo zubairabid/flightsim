@@ -37,7 +37,7 @@ Turret turrets[C_TURR];
 Pointer arrow;
 
 
-int viewf = 0;
+int viewf = 1;
 int current = 0;
 int forward = 0, tilt = 0, gravity = 0;
 
@@ -62,9 +62,11 @@ void draw() {
     
     float eye_x = 0, eye_y = 0, eye_z = 0;
     float up_x = 0, up_y = 0, up_z = 0;
+    float look_x = ball1.position.x, look_y = ball1.position.y, look_z = ball1.position.z;
 
-
-    if (viewf == 0) {
+    cout << "VIEWF: " << viewf << endl;
+    if (viewf == 1) {
+        cout << "perspective view";
         eye_x = ball1.position.x-PERSCAM_DIST*sin(camera_rotation_angle*M_PI/180.0f);
         eye_y = ball1.position.y + 20;
         eye_z = ball1.position.z-PERSCAM_DIST*cos(camera_rotation_angle*M_PI/180.0f);
@@ -85,15 +87,66 @@ void draw() {
             up_z = -up_z;
         }
     }
-    else {
-        eye_x = ball1.position.x+80;
-        eye_y = ball1.position.y + 20;
-        eye_z = ball1.position.z-0;
+    else if (viewf == 2) { // Plane view
+        cout << "plane view";
 
-        up_x = -1;
-        up_y = 1;
-        up_z = 0;
+        look_x = ball1.position.x+20*sin(camera_rotation_angle*M_PI/180.0f);
+        look_y = ball1.position.y-0.5;
+        look_z = ball1.position.z+20*cos(camera_rotation_angle*M_PI/180.0f);
+
+        eye_x = ball1.position.x+15*sin(camera_rotation_angle*M_PI/180.0f);
+        eye_y = ball1.position.y;
+        eye_z = ball1.position.z+15*cos(camera_rotation_angle*M_PI/180.0f);
+
+        up_x = abs(1*sin(camera_rotation_angle*M_PI/180.0f));
+        up_y = 0.2;
+        up_z = abs(1*cos(camera_rotation_angle*M_PI/180.0f));
+
+        if ( camera_rotation_angle > 0 && ((((int)camera_rotation_angle % 360) >= 90 && ((int)camera_rotation_angle % 360) < 180) || (((int)camera_rotation_angle % 360) >= 270 && ((int)camera_rotation_angle % 360) < 360))  ) {
+            up_z = -up_z;
+            // up_x = -up_x;
+        }
+        if (camera_rotation_angle < 0) {
+            up_z = -up_z;
+        }
+        if (camera_rotation_angle < 0  && ((((int)abs(camera_rotation_angle) % 360) >= 90 && ((int)abs(camera_rotation_angle) % 360) < 180) || (((int)abs(camera_rotation_angle) % 360) >= 270 && ((int)abs(camera_rotation_angle) % 360) < 360))) {
+            // up_x = -up_x;
+            up_z = -up_z;
+        }
     }
+    else if (viewf == 3) { // Top view
+
+        eye_x = ball1.position.x;
+        eye_y = ball1.position.y+ 500;
+        eye_z = ball1.position.z;
+
+        // up_x = -1*sin(camera_rotation_angle*M_PI/180.0f);
+        // up_y = 1*cos(camera_rotation_angle*M_PI/180.0f);
+        up_x = 1;
+        up_y = 1;
+        up_z = 1;
+
+        // if ( camera_rotation_angle > 0 && ((((int)camera_rotation_angle % 360) >= 90 && ((int)camera_rotation_angle % 360) < 180) || (((int)camera_rotation_angle % 360) >= 270 && ((int)camera_rotation_angle % 360) < 360))  ) {
+        //     up_z = -up_z;
+        //     // up_x = -up_x;
+        // }
+        // if (camera_rotation_angle < 0) {
+        //     up_z = -up_z;
+        // }
+        // if (camera_rotation_angle < 0  && ((((int)abs(camera_rotation_angle) % 360) >= 90 && ((int)abs(camera_rotation_angle) % 360) < 180) || (((int)abs(camera_rotation_angle) % 360) >= 270 && ((int)abs(camera_rotation_angle) % 360) < 360))) {
+        //     // up_x = -up_x;
+        //     up_z = -up_z;
+        // }
+    }
+    // if {
+    //     eye_x = ball1.position.x+80;
+    //     eye_y = ball1.position.y + 20;
+    //     eye_z = ball1.position.z-0;
+
+    //     up_x = -1;
+    //     up_y = 1;
+    //     up_z = 0;
+    // }
 
     // cout << "up_x = " << up_x << "\t up_y = " << up_y << "\t up_z = " << up_z << endl;
     // cout << "eye_x = " << eye_x << "\t eye_y = " << eye_y << "\t eye_z = " << eye_z << endl;
@@ -102,7 +155,7 @@ void draw() {
     // glm::vec3 eye (viewf==0?0:80, viewf==0?20:20, viewf==0?-100:0);
     
     // Target - Where is the camera looking at.  Don't change unless you are sure!!
-    glm::vec3 target (ball1.position.x, ball1.position.y, ball1.position.z);
+    glm::vec3 target (look_x, look_y, look_z);
     // glm::vec3 target (0, 0, 0);
     // Up - Up vector defines tilt of camera.  Don't change unless you are sure!!
     glm::vec3 up (up_x, up_y, up_z);
@@ -135,8 +188,11 @@ void draw() {
 }
 
 void tick_input(GLFWwindow *window) {
-    int left  = glfwGetKey(window, GLFW_KEY_LEFT);
-    int right = glfwGetKey(window, GLFW_KEY_RIGHT);
+    int one  = glfwGetKey(window, GLFW_KEY_1);
+    int two = glfwGetKey(window, GLFW_KEY_2);
+    int three = glfwGetKey(window, GLFW_KEY_3);
+    int four = glfwGetKey(window, GLFW_KEY_4);
+    int five = glfwGetKey(window, GLFW_KEY_5);
     
     int ahead = glfwGetKey(window, GLFW_KEY_W);
     int behind = glfwGetKey(window, GLFW_KEY_S);
@@ -155,12 +211,22 @@ void tick_input(GLFWwindow *window) {
 
 
 
-    if (left) {
+    if (one) {
         viewf = 1;
     }
-    if (right) {
-        viewf = 0;
+    if (two) {
+        viewf = 2;
     }
+    if (three) {
+        viewf = 3;
+    }
+    if (four) {
+        viewf = 4;
+    }
+    if (five) {
+        viewf = 5;
+    }
+    
     
     if (ahead) {
         forward = 1;
