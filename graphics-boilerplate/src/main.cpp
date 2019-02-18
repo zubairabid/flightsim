@@ -5,6 +5,7 @@
 #include "ring.h"
 #include "volcano.h"
 #include "pointer.h"
+#include "turret.h"
 
 #include "common/shader.hpp"
 // #include "texture.hpp"
@@ -19,11 +20,19 @@ GLFWwindow *window;
 * Customizable functions *
 **************************/
 
+const int SEA_LEVEL = -60;
+const int PERSCAM_DIST = 200;
+const int C_VOL = 100;
+const int C_RING = 100;
+const int C_TURR = 100;
+const int LIM = 1300;
+
 Ball ball1;
 Sea see;
 
-Ring rings[50];
-Volcano volcanoes[50];
+Ring rings[C_RING];
+Volcano volcanoes[C_VOL];
+Turret turrets[C_TURR];
 
 Pointer arrow;
 
@@ -34,6 +43,7 @@ int forward = 0, tilt = 0, gravity = 0;
 
 float screen_zoom = 1, screen_center_x = 0, screen_center_y = 0;
 float camera_rotation_angle = 0;
+
 
 Timer t60(1.0 / 60);
 
@@ -55,9 +65,9 @@ void draw() {
 
 
     if (viewf == 0) {
-        eye_x = ball1.position.x-200*sin(camera_rotation_angle*M_PI/180.0f);
+        eye_x = ball1.position.x-PERSCAM_DIST*sin(camera_rotation_angle*M_PI/180.0f);
         eye_y = ball1.position.y + 20;
-        eye_z = ball1.position.z-200*cos(camera_rotation_angle*M_PI/180.0f);
+        eye_z = ball1.position.z-PERSCAM_DIST*cos(camera_rotation_angle*M_PI/180.0f);
 
         up_x = abs(1*sin(camera_rotation_angle*M_PI/180.0f));
         up_y = 1;
@@ -116,10 +126,11 @@ void draw() {
     arrow.draw(VP);
     see.draw(VP);
     
-    rings[current].draw(VP);
     
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < C_VOL; i++) {
+        rings[i].draw(VP);
         volcanoes[i].draw(VP);
+        turrets[i].draw(VP);
     }
 }
 
@@ -184,7 +195,7 @@ void tick_input(GLFWwindow *window) {
 }
 
 void tick_elements() {
-    float angle = atan( ( rings[current].position.x - ball1.position.x ) / ( rings[current].position.z - ball1.position.z ) ) * 180.0f / M_PI;
+    float angle = atan( ( -rings[current].position.x + ball1.position.x ) / ( rings[current].position.z - ball1.position.z ) ) * 180.0f / M_PI;
     cout << "Angle: " << angle << endl;
     
     
@@ -192,7 +203,7 @@ void tick_elements() {
     arrow.tick(angle);
 
     camera_rotation_angle = ball1.rotation;
-    see.set_position(ball1.position.x, -60, ball1.position.z);
+    see.set_position(ball1.position.x, SEA_LEVEL, ball1.position.z);
     arrow.set_position(ball1.position.x, ball1.position.y+20, ball1.position.z);
 
 
@@ -207,16 +218,8 @@ void initGL(GLFWwindow *window, int width, int height) {
     // Create the models
 
     ball1       = Ball(0, 0, COLOR_GREEN);
-    see         = Sea(0, -60, 0, COLOR_GREEN);
-
-    arrow = Pointer(ball1.position.x, ball1.position.y+20, ball1.position.z, 0, COLOR_BLACK);
-
-    for (int i = 0; i < 50; i++) {
-        rings[i] = Ring(30, 0, 200*i, 10*i, COLOR_BLACK);
-    }
-    for (int i = 0; i < 50; i++) {
-        volcanoes[i] = Volcano(0, -60, 300*i, 10*i, COLOR_BLACK);
-    }
+    gen_map();
+    
     // Create and compile our GLSL program from the shaders
     programID = LoadShaders("Sample_GL.vert", "Sample_GL.frag");
     // Get a handle for our "MVP" uniform
@@ -238,6 +241,39 @@ void initGL(GLFWwindow *window, int width, int height) {
     cout << "GLSL: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << endl;
 }
 
+void gen_map() {
+    srand(time(NULL));
+    // Sea generation
+    see         = Sea(0, SEA_LEVEL, 0, COLOR_GREEN);
+
+    // Getting the pointer
+    arrow = Pointer(ball1.position.x, ball1.position.y+20, ball1.position.z, 0, COLOR_BLACK);
+
+    float x, z;
+    // Ring gen
+    for (int i = 0; i < C_RING; i++) {
+        x = (rand() % (2*LIM)) - LIM;
+        z = (rand() % (2*LIM)) - LIM;
+        rings[i] = Ring(x, 0, z, 10*i, COLOR_BLACK);
+        cout << "Ring generated at " << x << ", " << z << endl;
+    }
+
+    // Volcano gen
+    for (int i = 0; i < C_VOL; i++) {
+        x = (rand() % (2*LIM)) - LIM;
+        z = (rand() % (2*LIM)) - LIM;
+        volcanoes[i] = Volcano(x, SEA_LEVEL, z, 0, COLOR_BLACK);
+        cout << "Volcano generated at " << x << ", " << z << endl;
+    }
+
+    for (int i = 0; i < C_VOL; i++) {
+        x = (rand() % (2*LIM)) - LIM;
+        z = (rand() % (2*LIM)) - LIM;
+        turrets[i] = Turret(x, SEA_LEVEL, z, COLOR_BLACK);
+        cout << "Turret generated at " << x << ", " << z << endl;
+    }
+
+}
 
 int main(int argc, char **argv) {
     srand(time(0));
