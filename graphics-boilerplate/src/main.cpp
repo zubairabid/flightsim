@@ -4,6 +4,7 @@
 #include "sea.h"
 #include "ring.h"
 #include "volcano.h"
+#include "pointer.h"
 
 #include "common/shader.hpp"
 // #include "texture.hpp"
@@ -21,9 +22,10 @@ GLFWwindow *window;
 Ball ball1;
 Sea see;
 
-Ring rings[100];
-Volcano volcanoes[100];
+Ring rings[50];
+Volcano volcanoes[50];
 
+Pointer arrow;
 
 
 int viewf = 0;
@@ -111,10 +113,13 @@ void draw() {
     // Scene render
     ball1.draw(VP);
     see.draw(VP);
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 50; i++) {
         rings[i].draw(VP);
+    }
+    for (int i = 0; i < 50; i++) {
         volcanoes[i].draw(VP);
     }
+    arrow.draw(VP);
 }
 
 void tick_input(GLFWwindow *window) {
@@ -181,6 +186,8 @@ void tick_elements() {
     ball1.tick(forward, tilt, gravity);
     camera_rotation_angle = ball1.rotation;
     see.set_position(ball1.position.x, -60, ball1.position.z);
+    arrow.set_position(ball1.position.x, ball1.position.y+10, ball1.position.z);
+
     cout << "x: " << ball1.position.x << "\ty: " << ball1.position.y << "\tz: " << ball1.position.z << "\trot: " << camera_rotation_angle << endl;
     // cout << camera_rotation_angle << endl;
 }
@@ -194,11 +201,14 @@ void initGL(GLFWwindow *window, int width, int height) {
     ball1       = Ball(0, 0, COLOR_GREEN);
     see         = Sea(0, -60, 0, COLOR_GREEN);
 
-    for (int i = 0; i < 100; i++) {
+    arrow = Pointer(ball1.position.x, ball1.position.y+10, ball1.position.z, 0, COLOR_BLACK);
+
+    for (int i = 0; i < 50; i++) {
         rings[i] = Ring(0, 0, 200*i, 10*i, COLOR_BLACK);
+    }
+    for (int i = 0; i < 50; i++) {
         volcanoes[i] = Volcano(0, -60, 300*i, 10*i, COLOR_BLACK);
     }
-
     // Create and compile our GLSL program from the shaders
     programID = LoadShaders("Sample_GL.vert", "Sample_GL.frag");
     // Get a handle for our "MVP" uniform
