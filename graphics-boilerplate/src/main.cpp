@@ -29,6 +29,7 @@ Pointer arrow;
 
 
 int viewf = 0;
+int current = 0;
 int forward = 0, tilt = 0, gravity = 0;
 
 float screen_zoom = 1, screen_center_x = 0, screen_center_y = 0;
@@ -112,14 +113,14 @@ void draw() {
 
     // Scene render
     ball1.draw(VP);
+    arrow.draw(VP);
     see.draw(VP);
-    for (int i = 0; i < 50; i++) {
-        rings[i].draw(VP);
-    }
+    
+    rings[current].draw(VP);
+    
     for (int i = 0; i < 50; i++) {
         volcanoes[i].draw(VP);
     }
-    arrow.draw(VP);
 }
 
 void tick_input(GLFWwindow *window) {
@@ -183,10 +184,17 @@ void tick_input(GLFWwindow *window) {
 }
 
 void tick_elements() {
+    float angle = atan( ( rings[current].position.x - ball1.position.x ) / ( rings[current].position.z - ball1.position.z ) ) * 180.0f / M_PI;
+    cout << "Angle: " << angle << endl;
+    
+    
     ball1.tick(forward, tilt, gravity);
+    arrow.tick(angle);
+
     camera_rotation_angle = ball1.rotation;
     see.set_position(ball1.position.x, -60, ball1.position.z);
-    arrow.set_position(ball1.position.x, ball1.position.y+10, ball1.position.z);
+    arrow.set_position(ball1.position.x, ball1.position.y+20, ball1.position.z);
+
 
     cout << "x: " << ball1.position.x << "\ty: " << ball1.position.y << "\tz: " << ball1.position.z << "\trot: " << camera_rotation_angle << endl;
     // cout << camera_rotation_angle << endl;
@@ -201,10 +209,10 @@ void initGL(GLFWwindow *window, int width, int height) {
     ball1       = Ball(0, 0, COLOR_GREEN);
     see         = Sea(0, -60, 0, COLOR_GREEN);
 
-    arrow = Pointer(ball1.position.x, ball1.position.y+10, ball1.position.z, 0, COLOR_BLACK);
+    arrow = Pointer(ball1.position.x, ball1.position.y+20, ball1.position.z, 0, COLOR_BLACK);
 
     for (int i = 0; i < 50; i++) {
-        rings[i] = Ring(0, 0, 200*i, 10*i, COLOR_BLACK);
+        rings[i] = Ring(30, 0, 200*i, 10*i, COLOR_BLACK);
     }
     for (int i = 0; i < 50; i++) {
         volcanoes[i] = Volcano(0, -60, 300*i, 10*i, COLOR_BLACK);
@@ -272,5 +280,5 @@ void reset_screen() {
     float bottom = screen_center_y - 4 / screen_zoom;
     float left   = screen_center_x - 4 / screen_zoom;
     float right  = screen_center_x + 4 / screen_zoom;
-    Matrices.projection = glm::perspective(glm::radians(15.0f), 1.0f/1.0f, 0.1f, 500.0f);
+    Matrices.projection = glm::perspective(glm::radians(15.0f), 1.0f/1.0f, 0.1f, 700.0f);
 }

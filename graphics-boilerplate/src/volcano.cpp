@@ -8,18 +8,24 @@ Volcano::Volcano(float x, float y, float z, float rot, color_t color) {
 
     static const GLfloat vertex_buffer_data[] = {
         0.0f, 35.0f, 0.0f,
-        25.0f, 0.0f, 0.0f,
-        -12.5f, 0.0f, 21.65f,
+        25.0f, 0.0f, 25.0f,
+        -25.0f, 0.0f, 25.0f,
         0.0f, 35.0f, 0.0f,
-        25.0f, 0.0f, 0.0f,
-        -12.5f, 0.0f, -21.65f,
+        25.0f, 0.0f, 25.0f,
+        25.0f, 0.0f, -25.0f,
         0.0f, 35.0f, 0.0f,
-        -12.5f, 0.0f, 21.65f,
-        -12.5f, 0.0f, -21.65f,
+        -25.0f, 0.0f, -25.0f,
+        -25.0f, 0.0f, 25.0f,
+        0.0f, 35.0f, 0.0f,
+        -25.0f, 0.0f, -25.0f,
+        25.0f, 0.0f, -25.0f        
     };
 
 
     static const GLfloat vertex_colours[] = {
+        1.0f, 0.0f, 0.0f,
+        0.4f, 0.26f, 0.13f,
+        0.4f, 0.26f, 0.13f,
         1.0f, 0.0f, 0.0f,
         0.4f, 0.26f, 0.13f,
         0.4f, 0.26f, 0.13f,
@@ -74,7 +80,7 @@ void Volcano::draw(glm::mat4 VP) {
         (void*)0                          // array buffer offset
     );
 
-    glDrawArrays(GL_TRIANGLES, 0, 6*360);
+    glDrawArrays(GL_TRIANGLES, 0, 12);
 
 
 

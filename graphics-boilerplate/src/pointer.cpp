@@ -8,12 +8,18 @@ Pointer::Pointer(float x, float y, float z, float rot, color_t color) {
 
     static const GLfloat vertex_buffer_data[] = {
         3.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 4.0f,
+        0.0f, 0.0f, 12.0f,
         -3.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 4.0f,
         0.0f, 0.0f, 12.0f
     };
 
 
     static const GLfloat vertex_colours[] = {
+        0.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 0.0f,
         0.0f, 0.0f, 1.0f,
         0.0f, 0.0f, 1.0f,
         1.0f, 0.0f, 0.0f
@@ -33,6 +39,7 @@ Pointer::Pointer(float x, float y, float z, float rot, color_t color) {
 void Pointer::draw(glm::mat4 VP) {
     Matrices.model = glm::mat4(10.0f);
     glm::mat4 translate = glm::translate (this->position);    // glTranslatef
+    std::cout << "Rotation: " << this->rotation << std::endl;
     glm::mat4 rotate    = glm::rotate((float) (this->rotation * M_PI / 1800.0f), glm::vec3(0, 1, 0));
     rotate  *= glm::rotate((float)(10* M_PI / 180.0f), glm::vec3(1, 0, 0));
     // No need as coords centered at 0, 0, 0 of pointer arouund which we waant to rotate
@@ -63,7 +70,7 @@ void Pointer::draw(glm::mat4 VP) {
         (void*)0                          // array buffer offset
     );
 
-    glDrawArrays(GL_TRIANGLES, 0, 6*360);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 
 
 
@@ -74,7 +81,8 @@ void Pointer::set_position(float x, float y, float z) {
     this->position = glm::vec3(x, y, z);
 }
 
-void Pointer::tick() {
+void Pointer::tick(float angle) {
+    this->rotation = angle;
     // this->rotation += speed;
     // this->position.x -= speed;
     // this->position.y -= speed;
