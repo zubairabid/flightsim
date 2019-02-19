@@ -170,15 +170,16 @@ void Ball::tick(int forward, int tilt, int up, int stop) {
     }
 
     if (stop == 0) {
-        this->position.z += speed*cos(this->rotation*M_PI/180.0f);
-        this->position.x += speed*sin(this->rotation*M_PI/180.0f);
     }
     else {
-        this->position.z -= speed*cos(this->rotation*M_PI/180.0f)/100.0f;
-        this->position.x -= speed*sin(this->rotation*M_PI/180.0f)/100.0f;
+        // this->position.z -= speed*cos(this->rotation*M_PI/180.0f)/100.0f;
+        // // this->position.y += speed*sin(this->pitch*M_PI/180.0f);
+        this->rotation += 180;
     }
     this->position.y -= speed*sin(this->pitch*M_PI/180.0f);
-
+    this->position.z += speed*cos(this->rotation*M_PI/180.0f);
+    this->position.x += speed*sin(this->rotation*M_PI/180.0f);
+    
     if (tilt != 0) {
         this->rotation -= tilt;
         if (tilt == 1) {

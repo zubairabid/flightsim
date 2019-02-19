@@ -341,7 +341,7 @@ void create_bomb() {
 }
 
 void tick_elements() {
-    bool coll_vol = false, coll_ring = false;
+    bool stop_plane = false, coll_ring = false;
     // 
     // 
     // 
@@ -352,12 +352,16 @@ void tick_elements() {
     // 
     // 
 
+    // PLANE VS SURROUNDINGS
+    if (ball1.position.x >= LIM || ball1.position.z >= LIM || ball1.position.x <= -LIM || ball1.position.z <= -LIM)
+        stop_plane = true;
+
     // VOLCANO V PLANE
     for (int i = 0; i < C_VOL; i++) {
         if (detect_collision_lite(volcanoes[i].bounds, ball1.bounds)) {
             cout << "Collided with a volcano" << endl;
             ball1.life--;
-            coll_vol = true;
+            stop_plane = true;
         }
     }
 
@@ -425,7 +429,7 @@ void tick_elements() {
     float angle = atan( ( -rings[current].position.x + ball1.position.x ) / ( rings[current].position.z - ball1.position.z ) ) * 180.0f / M_PI;
     // cout << "Angle: " << angle << endl;
     
-    if (coll_vol) {
+    if (stop_plane) {
         ball1.tick(0, 0, up, 1);
     }
     else {
