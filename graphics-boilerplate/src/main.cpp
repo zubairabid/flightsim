@@ -42,6 +42,7 @@ Ring rings[C_RING];
 int ring_clear[C_RING];
 Volcano volcanoes[C_VOL];
 Turret turrets[C_TURR];
+int turret_clear[C_TURR];
 Atg bullets[C_ATG];
 Bomb bombs[C_BOMB];
 
@@ -191,7 +192,8 @@ void draw() {
     see.draw(VP);
     
     for (int i = 0; i < C_TURR; i++) {
-        turrets[i].draw(VP);
+        if (turret_clear[i] == 0)
+            turrets[i].draw(VP);
     }
     for (int i = 0; i < C_RING; i++) {
         if(ring_clear[i] == 0)
@@ -323,6 +325,7 @@ void tick_elements() {
     // 
     // 
 
+    // VOLCANO V PLANE
     for (int i = 0; i < C_VOL; i++) {
         if (detect_collision_lite(volcanoes[i].bounds, ball1.bounds)) {
             cout << "Collided with a volcano" << endl;
@@ -331,6 +334,7 @@ void tick_elements() {
         }
     }
 
+    // PLANE V RING
     for (int i = 0; i < C_RING; i++) {
         if (ring_clear[i] == 0 && detect_collision_lite(ball1.bounds, rings[i].bounds)) {
             ring_clear[i] = 1;
@@ -338,13 +342,17 @@ void tick_elements() {
         }
     }
 
+    // BULLET V CANNON
     for (int i = 0; i < count_atg; i++) {
         for (int j = 0; j < C_TURR; j++) {
-            if (detect_collision(bullets[i].bounds, turrets[j].bounds)) {
+            if (turret_clear[j] == 0 && detect_collision(bullets[i].bounds, turrets[j].bounds)) {
                 cout << "DELETE THIS CANNON" << endl;
+                turret_clear[j] = 1;
             }
         }
     }
+
+
 
     // 
     // 
@@ -445,10 +453,12 @@ void gen_map() {
         cout << "Volcano generated at " << x << ", " << z << endl;
     }
 
+    // Turret gen
     for (int i = 0; i < C_VOL; i++) {
         x = (rand() % (2*LIM)) - LIM;
         z = (rand() % (2*LIM)) - LIM;
         turrets[i] = Turret(x, SEA_LEVEL, z, COLOR_BLACK);
+        turret_clear[i] = 0;
         cout << "Turret generated at " << x << ", " << z << endl;
     }
 
