@@ -24,11 +24,11 @@ GLFWwindow *window;
 
 const int SEA_LEVEL = -60;
 const int PERSCAM_DIST = 200;
-const int C_VOL = 100;
+const int C_VOL = 30;
 const int C_RING = 100;
-const int C_TURR = 100;
-const int C_ATG = 500;
-const int C_BOMB = 500;
+const int C_TURR = 50;
+const int C_ATG = 100;
+const int C_BOMB = 100;
 int count_atg = 0;
 int count_bomb = 0;
 int current_bullet = 0;
@@ -39,6 +39,7 @@ Ball ball1;
 Sea see;
 
 Ring rings[C_RING];
+int ring_clear[C_RING];
 Volcano volcanoes[C_VOL];
 Turret turrets[C_TURR];
 Atg bullets[C_ATG];
@@ -193,7 +194,8 @@ void draw() {
         turrets[i].draw(VP);
     }
     for (int i = 0; i < C_RING; i++) {
-        rings[i].draw(VP);
+        if(ring_clear[i] == 0)
+            rings[i].draw(VP);
     }
     for (int i = 0; i < count_atg; i++) {
         bullets[i].draw(VP);
@@ -330,8 +332,17 @@ void tick_elements() {
     }
 
     for (int i = 0; i < C_RING; i++) {
-        if (detect_collision_lite(ball1.bounds, rings[i].bounds)) {
+        if (ring_clear[i] == 0 && detect_collision_lite(ball1.bounds, rings[i].bounds)) {
+            ring_clear[i] = 1;
             ball1.life+=10000;
+        }
+    }
+
+    for (int i = 0; i < count_atg; i++) {
+        for (int j = 0; j < C_TURR; j++) {
+            if (detect_collision(bullets[i].bounds, turrets[j].bounds)) {
+                cout << "DELETE THIS CANNON" << endl;
+            }
         }
     }
 
@@ -422,6 +433,7 @@ void gen_map() {
         x = (rand() % (2*LIM)) - LIM;
         z = (rand() % (2*LIM)) - LIM;
         rings[i] = Ring(x, 0, z, 10*i, COLOR_BLACK);
+        ring_clear[i] = 0;
         cout << "Ring generated at " << x << ", " << z << endl;
     }
 
