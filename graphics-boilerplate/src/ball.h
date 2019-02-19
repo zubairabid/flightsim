@@ -11,6 +11,7 @@ public:
     glm::vec3 position;
     float rotation;
     float roll;
+    float pitch;
     float gravity;
     float limit;
     void draw(glm::mat4 VP);

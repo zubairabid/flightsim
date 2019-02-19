@@ -11,6 +11,7 @@ Ball::Ball(float x, float y, color_t color) {
     this->position = glm::vec3(x, y, 0);
     this->rotation = 0;
     this->roll = 0;
+    this->pitch = 0;
     this->gravity = -0.1;
     speed = 0.4;
     this->limit = 5000;
@@ -69,6 +70,7 @@ void Ball::draw(glm::mat4 VP) {
     glm::mat4 translate = glm::translate (this->position);    // glTranslatef
     glm::mat4 rotate    = glm::rotate((float) (this->rotation * M_PI / 180.0f), glm::vec3(0, 1, 0));
     // No need as coords centered at 0, 0, 0 of cube arouund which we waant to rotate
+    rotate = rotate * glm::rotate((float) (this->pitch*M_PI/180.0f), glm::vec3(1, 0, 0));
     rotate = rotate * glm::rotate((float) (this->roll*M_PI/180.0f), glm::vec3(0, 0, 1));
     // rotate          = rotate * glm::translate(glm::vec3(0, -0.6, 0));
     Matrices.model *= (translate * rotate);
@@ -133,19 +135,35 @@ void Ball::set_position(float x, float y) {
 void Ball::tick(int forward, int tilt, int up) {
     // std::cout << tilt << std::endl;
 
-    if (up == -1) {
-        this->gravity = -0.3;
+    // if (up == -1) {
+    //     this->gravity = -0.3;
+    // }
+    // else if (up == 1) {
+    //     this->gravity = 0.3;
+    // }
+    // else {
+    //     this->gravity = 0;
+    // }
+    // this->position.y += this->gravity;
+
+    if (up == 1) {
+        if (pitch > -25)
+            pitch--;
     }
-    else if (up == 1) {
-        this->gravity = 0.3;
+    else if (up == -1) {
+        if (pitch < 25)
+            pitch++;
     }
     else {
-        this->gravity = 0;
+        if (pitch > 0)
+            pitch--;
+        if (pitch < 0)
+            pitch++;
     }
-    this->position.y += this->gravity;
 
     this->position.z += speed*cos(this->rotation*M_PI/180.0f);
     this->position.x += speed*sin(this->rotation*M_PI/180.0f);
+    this->position.y -= speed*sin(this->pitch*M_PI/180.0f);
 
     if (tilt != 0) {
         this->rotation -= tilt;
