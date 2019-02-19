@@ -318,9 +318,13 @@ void create_gta(int i) {
     y = turrets[i].position.y+10;
     z = turrets[i].position.z;
 
-    float angle = atan( ( ball1.position.x - x ) / ( ball1.position.z - z ) );
+    float angle = atan( ( ball1.position.x - x ) / ( ball1.position.z - z ) ) * 180.0 / M_PI;
+    cout << "Angle of GTA: " << angle << endl;
 
-    homing[current_homing] = Gta(x, y, z, angle, COLOR_BLACK);
+    if (ball1.position.z <= z)
+        homing[current_homing] = Gta(x, y, z, -angle, COLOR_BLACK);
+    else
+        homing[current_homing] = Gta(x, y, z, 180-angle, COLOR_BLACK);;
     current_homing = (current_homing+1)%C_GTA;
 }
 void create_bomb() {
@@ -409,7 +413,7 @@ void tick_elements() {
 
     cout << "Life: " << ball1.life << "\tPoints: " << ball1.points << endl;
     float angle = atan( ( -rings[current].position.x + ball1.position.x ) / ( rings[current].position.z - ball1.position.z ) ) * 180.0f / M_PI;
-    cout << "Angle: " << angle << endl;
+    // cout << "Angle: " << angle << endl;
     
     if (coll_vol) {
         ball1.tick(0, 0, up, 1);
