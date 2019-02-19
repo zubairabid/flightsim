@@ -78,6 +78,7 @@ void reset_screen();
 
 void gen_map();
 void create_atg();
+void create_bomb();
 
 // ---- Colors ----
 extern const color_t COLOR_RED;
