@@ -4,6 +4,11 @@
 Ring::Ring(float x, float y, float z, float rot, color_t color) {
 
     this->position = glm::vec3(x, y, z);
+
+    this->bounds.x = x;
+    this->bounds.y = y;
+    this->bounds.z = z;
+    this->bounds.radius = 10.0f;
     this->rotation = rot;
 
     this->omega = 1.0f;
@@ -130,5 +135,9 @@ void Ring::tick() {
     // this->rotation += speed;
     // this->position.x -= speed;
     // this->position.y -= speed;
+
+    this->bounds.x = this->position.x;
+    this->bounds.y = this->position.y;
+    this->bounds.z = this->position.z;
 }
 

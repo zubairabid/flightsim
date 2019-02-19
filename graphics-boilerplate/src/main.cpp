@@ -310,6 +310,47 @@ void create_bomb() {
 }
 
 void tick_elements() {
+
+    // 
+    // 
+    // 
+    // 
+    // COLLISIONS
+    // 
+    // 
+    // 
+    // 
+
+    for (int i = 0; i < C_VOL; i++) {
+        if (detect_collision_lite(volcanoes[i].bounds, ball1.bounds)) {
+            cout << "Collided with a volcano" << endl;
+            ball1.life--;
+        }
+    }
+
+    for (int i = 0; i < C_RING; i++) {
+        if (detect_collision_lite(ball1.bounds, rings[i].bounds)) {
+            ball1.life+=10000;
+        }
+    }
+
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+
+
+
+
+
+
+
+    cout << "Jeevan: " << ball1.life << endl;
     float angle = atan( ( -rings[current].position.x + ball1.position.x ) / ( rings[current].position.z - ball1.position.z ) ) * 180.0f / M_PI;
     cout << "Angle: " << angle << endl;
     
@@ -428,8 +469,11 @@ int main(int argc, char **argv) {
 }
 
 bool detect_collision(bounding_box_t a, bounding_box_t b) {
-    return (abs(a.x - b.x) * 2 < (a.width + b.width)) &&
-           (abs(a.y - b.y) * 2 < (a.height + b.height));
+    return a.radius*a.radius + b.radius*b.radius + 2*a.radius*b.radius > (a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y) + (a.z-b.z)*(a.z-b.z);
+}
+
+bool detect_collision_lite(bounding_box_t a, bounding_box_t b) { // Where b radius is not considered
+    return a.radius*a.radius > (a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y) + (a.z-b.z)*(a.z-b.z);
 }
 
 void reset_screen() {

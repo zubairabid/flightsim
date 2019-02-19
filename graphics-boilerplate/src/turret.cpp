@@ -9,6 +9,11 @@ extern GLuint programID;
 
 Turret::Turret(float x, float y, float z, color_t color) {
     this->position = glm::vec3(x, y, z);
+
+    this->bounds.x = x;
+    this->bounds.y = y;
+    this->bounds.z = z;
+    this->bounds.radius = 8;
     this->rotation = 0;
     this->roll = 0;
 
@@ -128,6 +133,10 @@ void Turret::set_position(float x, float y) {
 }
 
 void Turret::tick(int forward, int tilt, int up) {
+
+    this->bounds.x = this->position.x;
+    this->bounds.y = this->position.y;
+    this->bounds.z = this->position.z;
     // std::cout << tilt << std::endl;
 
     // if (up == -1) {

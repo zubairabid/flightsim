@@ -4,6 +4,12 @@
 Atg::Atg(float x, float y, float z, float rot, color_t color) {
 
     this->position = glm::vec3(x, y, z);
+    this->bounds.x = x;
+    this->bounds.y = y;
+    this->bounds.z = z;
+    this->bounds.radius = 0.35;
+    
+    
     this->rotation = rot;
 
     this->gravity = 1.0f;
@@ -117,5 +123,9 @@ void Atg::tick() {
     this->position.z += this->speed*cos(this->rotation*M_PI/180.0f);
     this->position.x += this->speed*sin(this->rotation*M_PI/180.0f);
     this->position.y -= this->gravity;
+
+    this->bounds.x = this->position.x;
+    this->bounds.y = this->position.y;
+    this->bounds.z = this->position.z;
 }
 

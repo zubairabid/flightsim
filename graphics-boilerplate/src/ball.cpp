@@ -16,6 +16,13 @@ Ball::Ball(float x, float y, color_t color) {
     speed = 0.4;
     this->limit = 5000;
 
+    this->life = 10000000;
+
+    this->bounds.x = x;
+    this->bounds.y = y;
+    this->bounds.z = 0;
+    this->bounds.radius = 10.0f;
+
     this->Texture = loadDDS("../../uvmap.DDS");
     this->TextureID = glGetUniformLocation(programID, "myTextureSampler");
 
@@ -200,5 +207,9 @@ void Ball::tick(int forward, int tilt, int up) {
         else 
             this->speed += 0.2;
     }
+
+    this->bounds.x = this->position.x;
+    this->bounds.y = this->position.y;
+    this->bounds.z = this->position.z;
 }
 

@@ -67,11 +67,12 @@ enum direction_t { DIR_UP, DIR_RIGHT, DIR_DOWN, DIR_LEFT };
 struct bounding_box_t {
     float x;
     float y;
-    float width;
-    float height;
+    float z;
+    float radius;
 };
 
 bool detect_collision(bounding_box_t a, bounding_box_t b);
+bool detect_collision_lite(bounding_box_t a, bounding_box_t b);
 
 extern float screen_zoom, screen_center_x, screen_center_y;
 void reset_screen();

@@ -4,6 +4,11 @@
 Bomb::Bomb(float x, float y, float z, float rot, color_t color) {
 
     this->position = glm::vec3(x, y, z);
+
+    this->bounds.x = x;
+    this->bounds.y = y;
+    this->bounds.z = z;
+    this->bounds.radius = 2.78;
     this->rotation = rot;
 
     this->gravity = 1.0f;
@@ -115,5 +120,9 @@ void Bomb::tick() {
     // this->position.x -= speed;
     // this->position.y -= speed;
     this->position.y -= this->gravity;
+
+    this->bounds.x = this->position.x;
+    this->bounds.y = this->position.y;
+    this->bounds.z = this->position.z;
 }
 

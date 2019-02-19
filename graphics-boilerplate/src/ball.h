@@ -14,6 +14,10 @@ public:
     float pitch;
     float gravity;
     float limit;
+
+    int life;
+
+    bounding_box_t bounds;
     void draw(glm::mat4 VP);
     void set_position(float x, float y);
     void tick(int forward, int tilt, int up);

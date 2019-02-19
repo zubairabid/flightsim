@@ -12,6 +12,7 @@ public:
     float rotation;
 
     float gravity;
+    bounding_box_t bounds;
 
     void draw(glm::mat4 VP);
     void set_position(float x, float y, float z);
