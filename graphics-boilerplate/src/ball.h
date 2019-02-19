@@ -20,7 +20,7 @@ public:
     bounding_box_t bounds;
     void draw(glm::mat4 VP);
     void set_position(float x, float y);
-    void tick(int forward, int tilt, int up);
+    void tick(int forward, int tilt, int up, int stop);
     double speed;
 private:
     VAO *object;

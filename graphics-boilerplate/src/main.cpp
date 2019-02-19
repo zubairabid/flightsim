@@ -49,7 +49,7 @@ Pointer arrow;
 
 int viewf = 1;
 int current = 0;
-int forward = 0, tilt = 0, gravity = 0;
+int forward = 0, tilt = 0, up = 0;
 
 float screen_zoom = 1, screen_center_x = 0, screen_center_y = 0;
 float camera_rotation_angle = 0;
@@ -273,13 +273,13 @@ void tick_input(GLFWwindow *window) {
     }
 
     if (move_up) {
-        gravity = 1;
+        up = 1;
     }
     else if (move_down) {
-        gravity = -1;
+        up = -1;
     }
     else {
-        gravity = 0;
+        up = 0;
     }
 
 }
@@ -310,7 +310,7 @@ void create_bomb() {
 }
 
 void tick_elements() {
-
+    bool coll_vol = false, coll_ring = false;
     // 
     // 
     // 
@@ -325,6 +325,7 @@ void tick_elements() {
         if (detect_collision_lite(volcanoes[i].bounds, ball1.bounds)) {
             cout << "Collided with a volcano" << endl;
             ball1.life--;
+            coll_vol = true;
         }
     }
 
@@ -354,8 +355,12 @@ void tick_elements() {
     float angle = atan( ( -rings[current].position.x + ball1.position.x ) / ( rings[current].position.z - ball1.position.z ) ) * 180.0f / M_PI;
     cout << "Angle: " << angle << endl;
     
-    
-    ball1.tick(forward, tilt, gravity);
+    if (coll_vol) {
+        ball1.tick(0, 0, up, 1);
+    }
+    else {
+        ball1.tick(forward, tilt, up, 0);
+    }
     arrow.tick(angle);
 
     camera_rotation_angle = ball1.rotation;

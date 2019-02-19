@@ -29,17 +29,17 @@ Volcano::Volcano(float x, float y, float z, float rot, color_t color) {
 
     static const GLfloat vertex_colours[] = {
         1.0f, 0.0f, 0.0f,
-        0.4f, 0.26f, 0.13f,
-        0.4f, 0.26f, 0.13f,
+        0.0f, 0.0f, 0.1f,
+        0.0f, 0.0f, 0.1f,
         1.0f, 0.0f, 0.0f,
-        0.4f, 0.26f, 0.13f,
-        0.4f, 0.26f, 0.13f,
+        0.0f, 0.0f, 0.1f,
+        0.0f, 0.0f, 0.1f,
         1.0f, 0.0f, 0.0f,
-        0.4f, 0.26f, 0.13f,
-        0.4f, 0.26f, 0.13f,
+        0.0f, 0.0f, 0.1f,
+        0.0f, 0.0f, 0.1f,
         1.0f, 0.0f, 0.0f,
-        0.4f, 0.26f, 0.13f,
-        0.4f, 0.26f, 0.13f
+        0.0f, 0.0f, 0.1f,
+        0.1f, 0.2f, 0.1f
     };
 
     this->object = create3DObject(GL_TRIANGLES, sizeof(vertex_buffer_data), vertex_buffer_data, color, GL_FILL);

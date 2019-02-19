@@ -139,7 +139,7 @@ void Ball::set_position(float x, float y) {
     this->position = glm::vec3(x, y, 0);
 }
 
-void Ball::tick(int forward, int tilt, int up) {
+void Ball::tick(int forward, int tilt, int up, int stop) {
     // std::cout << tilt << std::endl;
 
     // if (up == -1) {
@@ -168,8 +168,14 @@ void Ball::tick(int forward, int tilt, int up) {
             pitch++;
     }
 
-    this->position.z += speed*cos(this->rotation*M_PI/180.0f);
-    this->position.x += speed*sin(this->rotation*M_PI/180.0f);
+    if (stop == 0) {
+        this->position.z += speed*cos(this->rotation*M_PI/180.0f);
+        this->position.x += speed*sin(this->rotation*M_PI/180.0f);
+    }
+    else {
+        this->position.z -= speed*cos(this->rotation*M_PI/180.0f)/100.0f;
+        this->position.x -= speed*sin(this->rotation*M_PI/180.0f)/100.0f;
+    }
     this->position.y -= speed*sin(this->pitch*M_PI/180.0f);
 
     if (tilt != 0) {
