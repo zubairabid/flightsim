@@ -2,6 +2,7 @@
 #include "timer.h"
 #include "ball.h"
 #include "sea.h"
+#include "line.h"
 #include "ring.h"
 #include "volcano.h"
 #include "pointer.h"
@@ -41,6 +42,7 @@ const int LIM = 1300;
 
 Ball ball1;
 Sea see;
+Line line;
 
 Ring rings[C_RING];
 int ring_clear[C_RING];
@@ -195,6 +197,7 @@ void draw() {
     ball1.draw(VP);
     arrow.draw(VP);
     see.draw(VP);
+    line.draw(VP);
     
     for (int i = 0; i < C_TURR; i++) {
         if (turret_clear[i] == 0)
@@ -341,7 +344,7 @@ void create_bomb() {
 }
 
 void tick_elements() {
-    bool stop_plane = false, coll_ring = false;
+    bool reverse_plane = false, coll_ring = false, dead = false;
     // 
     // 
     // 
@@ -354,14 +357,23 @@ void tick_elements() {
 
     // PLANE VS SURROUNDINGS
     if (ball1.position.x >= LIM || ball1.position.z >= LIM || ball1.position.x <= -LIM || ball1.position.z <= -LIM)
-        stop_plane = true;
+        reverse_plane = true;
+
+    // PLANE VS SEA
+    if (ball1.position.y <= SEA_LEVEL) {
+        dead = true;
+    }
+
+    // PLANE VS THE REALITY OF LIFE
+    if (ball1.life <= 0)
+        dead = true;
 
     // VOLCANO V PLANE
     for (int i = 0; i < C_VOL; i++) {
         if (detect_collision_lite(volcanoes[i].bounds, ball1.bounds)) {
             cout << "Collided with a volcano" << endl;
             ball1.life--;
-            stop_plane = true;
+            dead = true;
         }
     }
 
@@ -420,16 +432,17 @@ void tick_elements() {
     // 
 
 
+    if (dead)
+        return;
 
 
 
 
-
-    cout << "Life: " << ball1.life << "\tPoints: " << ball1.points << endl;
+    cout << "Life: " << ball1.life << "\tPoints: " << ball1.points << "\tFuel: " << ball1.fuel << endl;
     float angle = atan( ( -rings[current].position.x + ball1.position.x ) / ( rings[current].position.z - ball1.position.z ) ) * 180.0f / M_PI;
     // cout << "Angle: " << angle << endl;
     
-    if (stop_plane) {
+    if (reverse_plane) {
         ball1.tick(0, 0, up, 1);
     }
     else {
@@ -490,6 +503,7 @@ void gen_map() {
     srand(time(NULL));
     // Sea generation
     see         = Sea(0, SEA_LEVEL, 0, COLOR_GREEN);
+    line = Line(0, SEA_LEVEL, 0, COLOR_BLACK);
 
     // Getting the pointer
     arrow = Pointer(ball1.position.x, ball1.position.y+20, ball1.position.z, 0, COLOR_BLACK);

@@ -16,8 +16,9 @@ Ball::Ball(float x, float y, color_t color) {
     speed = 0.4;
     this->limit = 5000;
 
+    this->fuel = 10000;
     this->points = 0;
-    this->life = 10000;
+    this->life = 2000;
 
     this->bounds.x = x;
     this->bounds.y = y;
@@ -140,7 +141,7 @@ void Ball::set_position(float x, float y) {
     this->position = glm::vec3(x, y, 0);
 }
 
-void Ball::tick(int forward, int tilt, int up, int stop) {
+void Ball::tick(int forward, int tilt, int up, int reverse) {
     // std::cout << tilt << std::endl;
 
     // if (up == -1) {
@@ -153,6 +154,11 @@ void Ball::tick(int forward, int tilt, int up, int stop) {
     //     this->gravity = 0;
     // }
     // this->position.y += this->gravity;
+    this->fuel--;
+    if (this->fuel <= 0) {
+        up = -1;
+        forward = 0;
+    }
 
     if (up == 1) {
         if (pitch > -25)
@@ -169,7 +175,7 @@ void Ball::tick(int forward, int tilt, int up, int stop) {
             pitch++;
     }
 
-    if (stop == 0) {
+    if (reverse == 0) {
     }
     else {
         // this->position.z -= speed*cos(this->rotation*M_PI/180.0f)/100.0f;
