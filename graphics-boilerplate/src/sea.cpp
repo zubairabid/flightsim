@@ -10,50 +10,22 @@ Sea::Sea(float x, float y, float z, color_t color) {
     // Our vertices. Three consecutive floats give a 3D vertex; Three consecutive vertices give a triangle.
     // A sea has 6 faces with 2 triangles each, so this makes 6*2=12 triangles, and 12*3 vertices
     static const GLfloat vertex_buffer_data[] = {
-        -900.0f,-1.0f,-900.0f, // triangle 1 : begin
-        -900.0f,-1.0f, 900.0f,
-        -900.0f, 1.0f, 900.0f, // triangle 1 : end
-        900.0f, 1.0f,-900.0f, // triangle 2 : begin
-        -900.0f,-1.0f,-900.0f,
-        -900.0f, 1.0f,-900.0f, // triangle 2 : end
-        900.0f,-1.0f, 900.0f,
-        -900.0f,-1.0f,-900.0f,
-        900.0f,-1.0f,-900.0f,
-        900.0f, 1.0f,-900.0f,
-        900.0f,-1.0f,-900.0f,
-        -900.0f,-1.0f,-900.0f,
-        -900.0f,-1.0f,-900.0f,
-        -900.0f, 1.0f, 900.0f,
-        -900.0f, 1.0f,-900.0f,
-        900.0f,-1.0f, 900.0f,
-        -900.0f,-1.0f, 900.0f,
-        -900.0f,-1.0f,-900.0f,
-        -900.0f, 1.0f, 900.0f,
-        -900.0f,-1.0f, 900.0f,
-        900.0f,-1.0f, 900.0f,
-        900.0f, 1.0f, 900.0f,
-        900.0f,-1.0f,-900.0f,
-        900.0f, 1.0f,-900.0f,
-        900.0f,-1.0f,-900.0f,
-        900.0f, 1.0f, 900.0f,
-        900.0f,-1.0f, 900.0f,
-        900.0f, 1.0f, 900.0f,
-        900.0f, 1.0f,-900.0f,
-        -900.0f, 1.0f,-900.0f,
-        900.0f, 1.0f, 900.0f,
-        -900.0f, 1.0f,-900.0f,
-        -900.0f, 1.0f, 900.0f,
-        900.0f, 1.0f, 900.0f,
-        -900.0f, 1.0f, 900.0f,
-        900.0f,-1.0f, 900.0f
+        900.0f,0.0f, 900.0f,
+        -900.0f,0.0f,-900.0f,
+        900.0f,0.0f,-900.0f,
+        900.0f,0.0f, 900.0f,
+        -900.0f,0.0f, 900.0f,
+        -900.0f,0.0f,-900.0f
     };
 
-    GLfloat vertex_colours[sizeof(vertex_buffer_data)];
-    for (int i = 0; i < sizeof(vertex_buffer_data);) {
-        vertex_colours[i++] = 0.5;
-        vertex_colours[i++] = 0.5;
-        vertex_colours[i++] = 1;
-    }
+    GLfloat vertex_colours[] = {
+        0.5f, 0.5f, 1.0f,
+        0.5f, 0.5f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        0.5f, 0.5f, 1.0f,
+        0.0f, 0.0f, 1.0f,
+        0.5f, 0.5f, 1.0f
+    };
 
     this->object = create3DObject(GL_TRIANGLES, sizeof(vertex_buffer_data), vertex_buffer_data, color, GL_FILL);
 

@@ -7,6 +7,7 @@
 #include "pointer.h"
 #include "turret.h"
 #include "atg.h"
+#include "gta.h"
 #include "bomb.h"
 
 #include "common/shader.hpp"
@@ -29,10 +30,13 @@ const int C_RING = 100;
 const int C_TURR = 50;
 const int C_ATG = 100;
 const int C_BOMB = 100;
+const int C_GTA = 100;
+int count_gta = 0;
 int count_atg = 0;
 int count_bomb = 0;
 int current_bullet = 0;
 int current_bomb = 0;
+int current_homing = 0;
 const int LIM = 1300;
 
 Ball ball1;
@@ -44,6 +48,7 @@ Volcano volcanoes[C_VOL];
 Turret turrets[C_TURR];
 int turret_clear[C_TURR];
 Atg bullets[C_ATG];
+Gta homing[C_GTA];
 Bomb bombs[C_BOMB];
 
 Pointer arrow;
@@ -202,6 +207,9 @@ void draw() {
     for (int i = 0; i < count_atg; i++) {
         bullets[i].draw(VP);
     }
+    for (int i = 0; i < count_gta; i++) {
+        homing[i].draw(VP);
+    }
     for (int i = 0; i < count_bomb; i++) {
         bombs[i].draw(VP);
     }
@@ -300,6 +308,18 @@ void create_atg() {
     bullets[current_bullet] = Atg(x, y, z, camera_rotation_angle, COLOR_BLACK);
     current_bullet = (current_bullet+1)%100;
 }
+void create_gta(int i) {
+    if (count_gta < C_GTA) {
+        count_gta++;
+    }
+    float x, y, z;
+    x = turrets[i].position.x;
+    y = turrets[i].position.y+8;
+    z = turrets[i].position.z;
+
+    bullets[current_homing] = Atg(x, y, z, -camera_rotation_angle, COLOR_BLACK);
+    current_homing = (current_homing+1)%100;
+}
 void create_bomb() {
     if (count_bomb < C_BOMB) {
         count_bomb++;
@@ -352,6 +372,13 @@ void tick_elements() {
         }
     }
 
+    // CANNON VS PLANE
+    for (int i = 0; i < count_atg; i++) {
+        if (turret_clear[i] == 0 && detect_collision(turrets[i].distance, ball1.bounds)) {
+            cout << "launching bullets" << endl;
+            create_gta(i);
+        }
+    }
 
 
     // 
@@ -388,6 +415,9 @@ void tick_elements() {
 
     for (int i = 0; i < count_atg; i++) {
         bullets[i].tick();
+    }
+    for (int i = 0; i < count_gta; i++) {
+        homing[i].tick();
     }
     for (int i = 0; i < count_bomb; i++) {
         bombs[i].tick();

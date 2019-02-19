@@ -79,6 +79,7 @@ void reset_screen();
 
 void gen_map();
 void create_atg();
+void create_gta(int i);
 void create_bomb();
 
 // ---- Colors ----

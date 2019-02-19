@@ -14,6 +14,13 @@ Turret::Turret(float x, float y, float z, color_t color) {
     this->bounds.y = y;
     this->bounds.z = z;
     this->bounds.radius = 8;
+
+    this->distance.x = x;
+    this->distance.y = y;
+    this->distance.z = z;
+    this->distance.radius = 300;
+
+    
     this->rotation = 0;
     this->roll = 0;
 
@@ -137,6 +144,10 @@ void Turret::tick(int forward, int tilt, int up) {
     this->bounds.x = this->position.x;
     this->bounds.y = this->position.y;
     this->bounds.z = this->position.z;
+
+    this->distance.x = this->position.x;
+    this->distance.y = this->position.y;
+    this->distance.z = this->position.z;
     // std::cout << tilt << std::endl;
 
     // if (up == -1) {

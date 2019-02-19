@@ -15,6 +15,7 @@ public:
     float limit;
 
     bounding_box_t bounds;
+    bounding_box_t distance;
     void draw(glm::mat4 VP);
     void set_position(float x, float y);
     void tick(int forward, int tilt, int up);
