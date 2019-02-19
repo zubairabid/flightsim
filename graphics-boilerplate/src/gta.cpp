@@ -12,8 +12,8 @@ Gta::Gta(float x, float y, float z, float rot, color_t color) {
     
     this->rotation = rot;
 
-    this->gravity = 10.0f;
-    this->speed = 1.0f;
+    this->gravity = -5.0f;
+    this->speed = 10.0f;
 
 
     GLfloat vertex_buffer_data[] = {
@@ -105,7 +105,7 @@ void Gta::draw(glm::mat4 VP) {
         (void*)0                          // array buffer offset
     );
 
-    glDrawArrays(GL_TRIANGLES, 0, 6*360);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
 
 
 
@@ -120,7 +120,7 @@ void Gta::tick() {
     // this->rotation += speed;
     // this->position.x -= speed;
     // this->position.y -= speed;
-    this->position.z += this->speed*cos(this->rotation*M_PI/180.0f);
+    this->position.z -= this->speed*cos(this->rotation*M_PI/180.0f);
     this->position.x += this->speed*sin(this->rotation*M_PI/180.0f);
     this->position.y -= this->gravity;
 

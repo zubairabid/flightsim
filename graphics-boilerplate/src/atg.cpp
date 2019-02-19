@@ -105,7 +105,7 @@ void Atg::draw(glm::mat4 VP) {
         (void*)0                          // array buffer offset
     );
 
-    glDrawArrays(GL_TRIANGLES, 0, 6*360);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
 
 
 

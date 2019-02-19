@@ -28,9 +28,9 @@ const int PERSCAM_DIST = 200;
 const int C_VOL = 30;
 const int C_RING = 100;
 const int C_TURR = 50;
-const int C_ATG = 100;
+const int C_ATG = 300;
 const int C_BOMB = 100;
-const int C_GTA = 100;
+const int C_GTA = 300;
 int count_gta = 0;
 int count_atg = 0;
 int count_bomb = 0;
@@ -208,6 +208,7 @@ void draw() {
         bullets[i].draw(VP);
     }
     for (int i = 0; i < count_gta; i++) {
+        // cout << "Drawing homing";
         homing[i].draw(VP);
     }
     for (int i = 0; i < count_bomb; i++) {
@@ -306,7 +307,7 @@ void create_atg() {
     z = ball1.position.z+10*cos(camera_rotation_angle*M_PI/180.0f);
 
     bullets[current_bullet] = Atg(x, y, z, camera_rotation_angle, COLOR_BLACK);
-    current_bullet = (current_bullet+1)%100;
+    current_bullet = (current_bullet+1)%C_ATG;
 }
 void create_gta(int i) {
     if (count_gta < C_GTA) {
@@ -314,11 +315,13 @@ void create_gta(int i) {
     }
     float x, y, z;
     x = turrets[i].position.x;
-    y = turrets[i].position.y+8;
+    y = turrets[i].position.y+10;
     z = turrets[i].position.z;
 
-    bullets[current_homing] = Atg(x, y, z, -camera_rotation_angle, COLOR_BLACK);
-    current_homing = (current_homing+1)%100;
+    float angle = atan( ( ball1.position.x - x ) / ( ball1.position.z - z ) );
+
+    homing[current_homing] = Gta(x, y, z, angle, COLOR_BLACK);
+    current_homing = (current_homing+1)%C_GTA;
 }
 void create_bomb() {
     if (count_bomb < C_BOMB) {
@@ -330,7 +333,7 @@ void create_bomb() {
     z = ball1.position.z;
 
     bombs[current_bomb] = Bomb(x, y, z, camera_rotation_angle, COLOR_BLACK);
-    current_bomb = (current_bomb+1)%100;
+    current_bomb = (current_bomb+1)%C_BOMB;
 }
 
 void tick_elements() {
@@ -358,7 +361,7 @@ void tick_elements() {
     for (int i = 0; i < C_RING; i++) {
         if (ring_clear[i] == 0 && detect_collision_lite(ball1.bounds, rings[i].bounds)) {
             ring_clear[i] = 1;
-            ball1.life+=10000;
+            ball1.points+=1;
         }
     }
 
@@ -373,10 +376,17 @@ void tick_elements() {
     }
 
     // CANNON VS PLANE
-    for (int i = 0; i < count_atg; i++) {
+    for (int i = 0; i < C_TURR; i++) {
         if (turret_clear[i] == 0 && detect_collision(turrets[i].distance, ball1.bounds)) {
-            cout << "launching bullets" << endl;
+            // cout << "launching bullets from " << i << endl;
             create_gta(i);
+        }
+    }
+
+    // HOMING VS PLANE
+    for (int i = 0; i < count_gta; i++) {
+        if (detect_collision(homing[i].bounds, ball1.bounds)) {
+            ball1.life -= 1;
         }
     }
 
@@ -397,7 +407,7 @@ void tick_elements() {
 
 
 
-    cout << "Jeevan: " << ball1.life << endl;
+    cout << "Life: " << ball1.life << "\tPoints: " << ball1.points << endl;
     float angle = atan( ( -rings[current].position.x + ball1.position.x ) / ( rings[current].position.z - ball1.position.z ) ) * 180.0f / M_PI;
     cout << "Angle: " << angle << endl;
     

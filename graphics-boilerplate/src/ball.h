@@ -15,6 +15,7 @@ public:
     float gravity;
     float limit;
 
+    int points;
     int life;
 
     bounding_box_t bounds;

@@ -18,7 +18,7 @@ Turret::Turret(float x, float y, float z, color_t color) {
     this->distance.x = x;
     this->distance.y = y;
     this->distance.z = z;
-    this->distance.radius = 300;
+    this->distance.radius = 100;
 
     
     this->rotation = 0;

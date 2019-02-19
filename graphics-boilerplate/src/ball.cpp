@@ -16,12 +16,13 @@ Ball::Ball(float x, float y, color_t color) {
     speed = 0.4;
     this->limit = 5000;
 
-    this->life = 10000000;
+    this->points = 0;
+    this->life = 10000;
 
     this->bounds.x = x;
     this->bounds.y = y;
     this->bounds.z = 0;
-    this->bounds.radius = 10.0f;
+    this->bounds.radius = 12.0f;
 
     this->Texture = loadDDS("../../uvmap.DDS");
     this->TextureID = glGetUniformLocation(programID, "myTextureSampler");
