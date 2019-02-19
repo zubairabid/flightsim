@@ -77,6 +77,7 @@ extern float screen_zoom, screen_center_x, screen_center_y;
 void reset_screen();
 
 void gen_map();
+void create_atg();
 
 // ---- Colors ----
 extern const color_t COLOR_RED;

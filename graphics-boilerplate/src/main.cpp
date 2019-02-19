@@ -6,6 +6,7 @@
 #include "volcano.h"
 #include "pointer.h"
 #include "turret.h"
+#include "atg.h"
 
 #include "common/shader.hpp"
 // #include "texture.hpp"
@@ -25,6 +26,9 @@ const int PERSCAM_DIST = 200;
 const int C_VOL = 100;
 const int C_RING = 100;
 const int C_TURR = 100;
+const int C_ATG = 500;
+int count_atg = 0;
+int current_bullet = 0;
 const int LIM = 1300;
 
 Ball ball1;
@@ -33,6 +37,7 @@ Sea see;
 Ring rings[C_RING];
 Volcano volcanoes[C_VOL];
 Turret turrets[C_TURR];
+Atg bullets[C_ATG];
 
 Pointer arrow;
 
@@ -179,11 +184,17 @@ void draw() {
     arrow.draw(VP);
     see.draw(VP);
     
-    
-    for (int i = 0; i < C_VOL; i++) {
-        rings[i].draw(VP);
-        volcanoes[i].draw(VP);
+    for (int i = 0; i < C_TURR; i++) {
         turrets[i].draw(VP);
+    }
+    for (int i = 0; i < C_RING; i++) {
+        rings[i].draw(VP);
+    }
+    for (int i = 0; i < count_atg; i++) {
+        bullets[i].draw(VP);
+    }
+    for (int i = 0; i < C_VOL; i++) {
+        volcanoes[i].draw(VP);
     }
 }
 
@@ -207,6 +218,7 @@ void tick_input(GLFWwindow *window) {
     
     if (click1) {
         cout << "clicked" << endl;
+        create_atg();
     }
 
 
@@ -260,6 +272,19 @@ void tick_input(GLFWwindow *window) {
 
 }
 
+void create_atg() {
+    if (count_atg < C_ATG) {
+        count_atg++;
+    }
+    float x, y, z;
+    x = ball1.position.x+10*sin(camera_rotation_angle*M_PI/180.0f);
+    y = ball1.position.y;
+    z = ball1.position.z+10*cos(camera_rotation_angle*M_PI/180.0f);
+
+    bullets[current_bullet] = Atg(x, y, z, camera_rotation_angle, COLOR_BLACK);
+    current_bullet = (current_bullet+1)%100;
+}
+
 void tick_elements() {
     float angle = atan( ( -rings[current].position.x + ball1.position.x ) / ( rings[current].position.z - ball1.position.z ) ) * 180.0f / M_PI;
     cout << "Angle: " << angle << endl;
@@ -272,6 +297,9 @@ void tick_elements() {
     see.set_position(ball1.position.x, SEA_LEVEL, ball1.position.z);
     arrow.set_position(ball1.position.x, ball1.position.y+20, ball1.position.z);
 
+    for (int i = 0; i < count_atg; i++) {
+        bullets[i].tick();
+    }
 
     cout << "x: " << ball1.position.x << "\ty: " << ball1.position.y << "\tz: " << ball1.position.z << "\trot: " << camera_rotation_angle << endl;
     // cout << camera_rotation_angle << endl;
