@@ -20,8 +20,8 @@ Pointer::Pointer(float x, float y, float z, float rot, color_t color) {
         0.0f, 0.0f, 1.0f,
         0.0f, 0.0f, 1.0f,
         1.0f, 0.0f, 0.0f,
-        0.0f, 0.0f, 1.0f,
-        0.0f, 0.0f, 1.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
         1.0f, 0.0f, 0.0f
     };
 
@@ -40,7 +40,7 @@ void Pointer::draw(glm::mat4 VP) {
     Matrices.model = glm::mat4(10.0f);
     glm::mat4 translate = glm::translate (this->position);    // glTranslatef
     std::cout << "Rotation: " << this->rotation << std::endl;
-    glm::mat4 rotate    = glm::rotate((float) (this->rotation * M_PI / 1800.0f), glm::vec3(0, 1, 0));
+    glm::mat4 rotate    = glm::rotate((float) (this->rotation * M_PI / 180.0f), glm::vec3(0, 1, 0));
     rotate  *= glm::rotate((float)(10* M_PI / 180.0f), glm::vec3(1, 0, 0));
     // No need as coords centered at 0, 0, 0 of pointer arouund which we waant to rotate
     // rotate          = rotate * glm::translate(glm::vec3(0, -0.6, 0));

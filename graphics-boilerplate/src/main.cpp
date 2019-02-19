@@ -379,6 +379,16 @@ void tick_elements() {
         }
     }
 
+    // BOMB VS CANNON
+    for (int i = 0; i < count_bomb; i++) {
+        for (int j = 0; j < C_BOMB; j++) {
+            if (turret_clear[j] == 0 && detect_collision(bombs[i].bounds, turrets[j].bounds)) {
+                cout << "DELETE THIS CANNON" << endl;
+                turret_clear[j] = 1;
+            }
+        }
+    }
+
     // CANNON VS PLANE
     for (int i = 0; i < C_TURR; i++) {
         if (turret_clear[i] == 0 && detect_collision(turrets[i].distance, ball1.bounds)) {
@@ -421,6 +431,7 @@ void tick_elements() {
     else {
         ball1.tick(forward, tilt, up, 0);
     }
+    
     arrow.tick(angle);
 
     camera_rotation_angle = ball1.rotation;
