@@ -498,6 +498,7 @@ void tick_elements() {
         for(int j = 0; j < count_atg; j++) {
             if (chute_clear[i] == 0 && detect_collision(bullets[j].bounds, chutes[i].bounds)) {
                 chute_clear[i] = 1;
+                ball1.points += 10;
             }
         }
     }
