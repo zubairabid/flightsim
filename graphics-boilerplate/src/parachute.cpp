@@ -13,7 +13,7 @@ Parachute::Parachute(float x, float y, float z, color_t color) {
     this->bounds.x = x;
     this->bounds.y = y;
     this->bounds.z = z;
-    this->bounds.radius = 20;
+    this->bounds.radius = 8;
 
     this->distance.x = x;
     this->distance.y = y;
@@ -23,13 +23,13 @@ Parachute::Parachute(float x, float y, float z, color_t color) {
     
     this->rotation = 0;
     this->roll = 0;
-    this->gravity = 0.2;
+    this->gravity = 0.04;
 
     this->Texture = loadDDS("../../uvmap.DDS");
     this->TextureID = glGetUniformLocation(programID, "myTextureSampler");
 
     std::cout << "About to load\n";
-    bool res = loadOBJ("../../p1.obj", this->vertices, this->uvs, this->normals);
+    bool res = loadOBJ("../../p2.obj", this->vertices, this->uvs, this->normals);
 
 
     // NOT SURE WHY IT IS IMPORTANT BUT DOES NOT RENDER OTHERWISE

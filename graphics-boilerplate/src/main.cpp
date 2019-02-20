@@ -490,7 +490,7 @@ void tick_elements() {
     // BULLET VS PARACHUTE
     for (int i = 0; i < C_PAR; i++) {
         for(int j = 0; j < count_atg; j++) {
-            if (chute_clear[i] == 0 && detect_collision(bullets[i].bounds, chutes[i].bounds)) {
+            if (chute_clear[i] == 0 && detect_collision(bullets[j].bounds, chutes[i].bounds)) {
                 chute_clear[i] = 1;
             }
         }
@@ -499,7 +499,7 @@ void tick_elements() {
     // BOMB VS PARACHUTE
     for (int i = 0; i < C_PAR; i++) {
         for(int j = 0; j < count_bomb; j++) {
-            if (chute_clear[i] == 0 && detect_collision(bombs[i].bounds, chutes[i].bounds)) {
+            if (chute_clear[i] == 0 && detect_collision(bombs[j].bounds, chutes[i].bounds)) {
                 chute_clear[i] = 1;
             }
         }
