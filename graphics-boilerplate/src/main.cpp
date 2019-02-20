@@ -80,6 +80,9 @@ int forward = 0, tilt = 0, up = 0;
 
 float screen_zoom = 1, screen_center_x = 0, screen_center_y = 0;
 float camera_rotation_angle = 0;
+float heli_rotation_x = 0;
+float heli_rotation_y = 0;
+
 
 
 Timer t60(1.0 / 60);
@@ -189,6 +192,30 @@ void draw() {
         up_z = 0;
         
         fov = 1400.0f; 
+    }
+    else if (viewf == 5) {
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+        eye_x = ball1.position.x-PERSCAM_DIST*sin(heli_rotation_x*M_PI/180.0f)*cos(heli_rotation_y*M_PI/180.0f);
+        eye_y = ball1.position.y + 55*sin(heli_rotation_y*M_PI/180.0f);
+        eye_z = ball1.position.z-PERSCAM_DIST*cos(heli_rotation_x*M_PI/180.0f)*cos(heli_rotation_y*M_PI/180.0f);
+
+        up_x = 0;
+        up_y = 1;
+        up_z = 0;
+
+        look_x = ball1.position.x;
+        look_y = ball1.position.y;
+        look_z = ball1.position.z;
+
+        double x, y;
+        glfwGetCursorPos(window, &x, &y);
+        glfwSetCursorPos(window, 350, 350);
+
+        heli_rotation_x += (x - 350);
+        heli_rotation_y += (y - 350);
+
+        cout << "X: " << x << "\tY: " << y << endl;
     }
     // if {
     //     eye_x = ball1.position.x+80;
