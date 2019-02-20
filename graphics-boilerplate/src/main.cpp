@@ -441,7 +441,7 @@ void tick_elements() {
     for (int i = 0; i < C_RING; i++) {
         if (ring_clear[i] == 0 && detect_collision_lite(ball1.bounds, rings[i].bounds)) {
             ring_clear[i] = 1;
-            ball1.points+=1;
+            ball1.points+=20;
         }
     }
 
@@ -451,6 +451,9 @@ void tick_elements() {
             if (turret_clear[j] == 0 && detect_collision(bullets[i].bounds, turrets[j].bounds)) {
                 // cout << "DELETE THIS CANNON" << endl;
                 turret_clear[j] = 1;
+                if (j == current) {
+                    ball1.points += 100;
+                }
             }
         }
     }
@@ -461,6 +464,9 @@ void tick_elements() {
             if (turret_clear[j] == 0 && detect_collision(bombs[i].bounds, turrets[j].bounds)) {
                 // cout << "DELETE THIS CANNON" << endl;
                 turret_clear[j] = 1;
+                if (j == current) {
+                    ball1.points += 100;
+                }
             }
         }
     }
@@ -520,11 +526,15 @@ void tick_elements() {
     if (dead)
         return;
 
-
+    while (turret_clear[current] == 1) {
+        current++;
+    }
 
 
     // cout << "Life: " << ball1.life << "\tPoints: " << ball1.points << "\tFuel: " << ball1.fuel << endl;
-    float angle = atan( ( -rings[current].position.x + ball1.position.x ) / ( rings[current].position.z - ball1.position.z ) ) * 180.0f / M_PI;
+    float angle = atan( ( turrets[current].position.x - ball1.position.x ) / ( turrets[current].position.z - ball1.position.z ) ) * 180.0f / M_PI;
+    if (ball1.position.z > turrets[current].position.z)
+        angle += 180;
     // cout << "Angle: " << angle << endl;
     
     if (reverse_plane) {
@@ -637,6 +647,8 @@ void gen_map() {
         turrets[i] = Turret(x, SEA_LEVEL, z, COLOR_BLACK);
         turret_clear[i] = 0;
         cout << "Turret generated at " << x << ", " << z << endl;
+        // turrets[0] = Turret(0, SEA_LEVEL, 0, COLOR_BLACK);
+        // turret_clear[0] = 0;
     }
     
     // Chute gen
