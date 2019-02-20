@@ -11,6 +11,7 @@
 #include "gta.h"
 #include "bomb.h"
 #include "refuel.h"
+#include "compass.h"
 
 #include "seven.h"
 
@@ -48,6 +49,7 @@ Ball ball1;
 Sea see;
 Line line;
 Refuel pump;
+Compass compass;
 
 Seven life[3];
 Seven points[3];
@@ -93,9 +95,9 @@ void draw() {
     float up_x = 0, up_y = 0, up_z = 0;
     float look_x = ball1.position.x, look_y = ball1.position.y, look_z = ball1.position.z;
 
-    cout << "VIEWF: " << viewf << endl;
+    // cout << "VIEWF: " << viewf << endl;
     if (viewf == 1) {
-        cout << "perspective view";
+        // cout << "perspective view";
         eye_x = ball1.position.x-PERSCAM_DIST*sin(camera_rotation_angle*M_PI/180.0f);
         eye_y = ball1.position.y + 20;
         eye_z = ball1.position.z-PERSCAM_DIST*cos(camera_rotation_angle*M_PI/180.0f);
@@ -117,7 +119,7 @@ void draw() {
         }
     }
     else if (viewf == 2) { // Plane view
-        cout << "plane view";
+        // cout << "plane view";
 
         look_x = ball1.position.x+20*sin(camera_rotation_angle*M_PI/180.0f);
         look_y = ball1.position.y-0.5;
@@ -227,6 +229,8 @@ void draw() {
     fuel[0].draw_num(st_VP, fuelamount%10);
     fuel[1].draw_num(st_VP, (fuelamount/10)%10);
     fuel[2].draw_num(st_VP, (fuelamount/100));
+
+    compass.draw(st_VP);
 
 
     // Scene render
@@ -359,7 +363,7 @@ void create_gta(int i) {
     z = turrets[i].position.z;
 
     float angle = atan( ( ball1.position.x - x ) / ( ball1.position.z - z ) ) * 180.0 / M_PI;
-    cout << "Angle of GTA: " << angle << endl;
+    // cout << "Angle of GTA: " << angle << endl;
 
     if (ball1.position.z <= z)
         homing[current_homing] = Gta(x, y, z, -angle, COLOR_BLACK);
@@ -418,7 +422,7 @@ void tick_elements() {
     // VOLCANO V PLANE
     for (int i = 0; i < C_VOL; i++) {
         if (detect_collision_lite(volcanoes[i].bounds, ball1.bounds)) {
-            cout << "Collided with a volcano" << endl;
+            // cout << "Collided with a volcano" << endl;
             ball1.life--;
             dead = true;
         }
@@ -436,7 +440,7 @@ void tick_elements() {
     for (int i = 0; i < count_atg; i++) {
         for (int j = 0; j < C_TURR; j++) {
             if (turret_clear[j] == 0 && detect_collision(bullets[i].bounds, turrets[j].bounds)) {
-                cout << "DELETE THIS CANNON" << endl;
+                // cout << "DELETE THIS CANNON" << endl;
                 turret_clear[j] = 1;
             }
         }
@@ -446,7 +450,7 @@ void tick_elements() {
     for (int i = 0; i < count_bomb; i++) {
         for (int j = 0; j < C_BOMB; j++) {
             if (turret_clear[j] == 0 && detect_collision(bombs[i].bounds, turrets[j].bounds)) {
-                cout << "DELETE THIS CANNON" << endl;
+                // cout << "DELETE THIS CANNON" << endl;
                 turret_clear[j] = 1;
             }
         }
@@ -485,7 +489,7 @@ void tick_elements() {
 
 
 
-    cout << "Life: " << ball1.life << "\tPoints: " << ball1.points << "\tFuel: " << ball1.fuel << endl;
+    // cout << "Life: " << ball1.life << "\tPoints: " << ball1.points << "\tFuel: " << ball1.fuel << endl;
     float angle = atan( ( -rings[current].position.x + ball1.position.x ) / ( rings[current].position.z - ball1.position.z ) ) * 180.0f / M_PI;
     // cout << "Angle: " << angle << endl;
     
@@ -501,6 +505,7 @@ void tick_elements() {
     camera_rotation_angle = ball1.rotation;
     see.set_position(ball1.position.x, SEA_LEVEL, ball1.position.z);
     arrow.set_position(ball1.position.x, ball1.position.y+20, ball1.position.z);
+    compass.rotation = camera_rotation_angle;
 
     for (int i = 0; i < count_atg; i++) {
         bullets[i].tick();
@@ -512,7 +517,7 @@ void tick_elements() {
         bombs[i].tick();
     }
 
-    cout << "x: " << ball1.position.x << "\ty: " << ball1.position.y << "\tz: " << ball1.position.z << "\trot: " << camera_rotation_angle << endl;
+    // cout << "x: " << ball1.position.x << "\ty: " << ball1.position.y << "\tz: " << ball1.position.z << "\trot: " << camera_rotation_angle << endl;
     // cout << camera_rotation_angle << endl;
 }
 
@@ -561,7 +566,7 @@ void gen_dash() {
     fuel[1] = Seven(-2.5, -2, 0, 0, COLOR_BLACK);
     fuel[0] = Seven(-3, -2, 0, 0, COLOR_BLACK);
 
-
+    compass = Compass(2.5, -3, 0, camera_rotation_angle, COLOR_BLACK);
 }
 
 void gen_map() {

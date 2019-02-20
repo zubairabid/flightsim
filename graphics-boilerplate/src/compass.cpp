@@ -1,28 +1,28 @@
-#include "pointer.h"
+#include "compass.h"
 #include "main.h"
 
-Pointer::Pointer(float x, float y, float z, float rot, color_t color) {
+Compass::Compass(float x, float y, float z, float rot, color_t color) {
 
     this->position = glm::vec3(x, y, z);
     this->rotation = rot;
 
     static const GLfloat vertex_buffer_data[] = {
-        3.0f, 0.0f, 0.0f,
-        0.0f, 0.0f, 4.0f,
-        0.0f, 0.0f, 12.0f,
-        -3.0f, 0.0f, 0.0f,
-        0.0f, 0.0f, 4.0f,
-        0.0f, 0.0f, 12.0f
+        -0.2f, 0.0f, 0.0f,
+        0.2f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        -0.2f, 0.0f, 0.0f,
+        0.2f, 0.0f, 0.0f,
+        0.0f, -1.0f, 0.0f
     };
 
 
     static const GLfloat vertex_colours[] = {
-        0.0f, 0.0f, 1.0f,
-        0.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f,
         1.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
-        1.0f, 0.0f, 0.0f
+        0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f
     };
 
     this->object = create3DObject(GL_TRIANGLES, sizeof(vertex_buffer_data), vertex_buffer_data, color, GL_FILL);
@@ -36,13 +36,13 @@ Pointer::Pointer(float x, float y, float z, float rot, color_t color) {
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_colours), vertex_colours, GL_STATIC_DRAW);
 }
 
-void Pointer::draw(glm::mat4 VP) {
+void Compass::draw(glm::mat4 VP) {
     Matrices.model = glm::mat4(10.0f);
     glm::mat4 translate = glm::translate (this->position);    // glTranslatef
     // std::cout << "Rotation: " << this->rotation << std::endl;
-    glm::mat4 rotate    = glm::rotate((float) (this->rotation * M_PI / 180.0f), glm::vec3(0, 1, 0));
-    rotate  *= glm::rotate((float)(10* M_PI / 180.0f), glm::vec3(1, 0, 0));
-    // No need as coords centered at 0, 0, 0 of pointer arouund which we waant to rotate
+    glm::mat4 rotate    = glm::rotate((float) (this->rotation * M_PI / 180.0f), glm::vec3(0, 0, 1));
+    // rotate  *= glm::rotate((float)(10* M_PI / 180.0f), glm::vec3(1, 0, 0));
+    // No need as coords centered at 0, 0, 0 of compass arouund which we waant to rotate
     // rotate          = rotate * glm::translate(glm::vec3(0, -0.6, 0));
     Matrices.model *= (translate * rotate);
     glm::mat4 MVP = VP * Matrices.model;
@@ -77,11 +77,11 @@ void Pointer::draw(glm::mat4 VP) {
     // draw3DObject(this->object);
 }
 
-void Pointer::set_position(float x, float y, float z) {
+void Compass::set_position(float x, float y, float z) {
     this->position = glm::vec3(x, y, z);
 }
 
-void Pointer::tick(float angle) {
+void Compass::tick(float angle) {
     this->rotation = angle;
     // this->rotation += speed;
     // this->position.x -= speed;
