@@ -73,6 +73,7 @@ int chute_clear[C_PAR];
 Pointer arrow;
 
 
+float fov = 700.0f;
 int viewf = 1;
 int current = 0;
 int forward = 0, tilt = 0, up = 0;
@@ -173,6 +174,21 @@ void draw() {
         //     // up_x = -up_x;
         //     up_z = -up_z;
         // }
+    }
+    else if (viewf == 4) {
+        eye_x = 0;
+        eye_y = 0;
+        eye_z = 0;
+
+        look_x = ball1.position.x;
+        look_y = ball1.position.y;
+        look_z = ball1.position.z;
+        
+        up_x = 0;
+        up_y = 1;
+        up_z = 0;
+        
+        fov = 1400.0f; 
     }
     // if {
     //     eye_x = ball1.position.x+80;
@@ -711,6 +727,6 @@ void reset_screen() {
     float bottom = screen_center_y - 4 / screen_zoom;
     float left   = screen_center_x - 4 / screen_zoom;
     float right  = screen_center_x + 4 / screen_zoom;
-    Matrices.projection = glm::perspective(glm::radians(15.0f), 1.0f/1.0f, 0.1f, 700.0f);
+    Matrices.projection = glm::perspective(glm::radians(15.0f), 1.0f/1.0f, 0.1f, fov);
     test.projection = glm::ortho(left, right, bottom, top, 1.0f, 500.0f);
 }
