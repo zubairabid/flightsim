@@ -54,7 +54,7 @@ void keyboardChar(GLFWwindow *window, unsigned int key) {
     switch (key) {
     case 'Q':
     case 'q':
-        quit(window);
+        // quit(window);
         break;
     default:
         break;

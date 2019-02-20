@@ -14,7 +14,7 @@ Refuel::Refuel(float x, float y, float z, float rot, color_t color) {
     this->omega = 1.0f;
     this->theta = 0.0f;
     this->radius = 10.0f;
-    this->dr = 1.0f;
+    this->dr = 9.0f;
 
 
     speed = 1;
