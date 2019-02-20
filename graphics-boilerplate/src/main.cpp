@@ -12,6 +12,7 @@
 #include "bomb.h"
 #include "refuel.h"
 #include "compass.h"
+#include "parachute.h"
 
 #include "seven.h"
 
@@ -37,6 +38,7 @@ const int C_TURR = 50;
 const int C_ATG = 300;
 const int C_BOMB = 100;
 const int C_GTA = 300;
+const int C_PAR = 300;
 int count_gta = 0;
 int count_atg = 0;
 int count_bomb = 0;
@@ -44,6 +46,7 @@ int current_bullet = 0;
 int current_bomb = 0;
 int current_homing = 0;
 const int LIM = 1300;
+
 
 Ball ball1;
 Sea see;
@@ -64,6 +67,8 @@ int turret_clear[C_TURR];
 Atg bullets[C_ATG];
 Gta homing[C_GTA];
 Bomb bombs[C_BOMB];
+Parachute chutes[C_PAR];
+int chute_clear[C_PAR];
 
 Pointer arrow;
 
@@ -260,6 +265,10 @@ void draw() {
     }
     for (int i = 0; i < C_VOL; i++) {
         volcanoes[i].draw(VP);
+    }
+    for (int i = 0; i < C_PAR; i++) {
+        if (chute_clear[i] == 0)
+            chutes[i].draw(VP);
     }
 }
 
@@ -471,7 +480,32 @@ void tick_elements() {
         }
     }
 
+    // PARACHUTE VS PLANE
+    for (int i = 0; i < C_PAR; i++) {
+        if (chute_clear[i] == 0 && detect_collision(chutes[i].distance, ball1.bounds)) {
+            chutes[i].tick();
+        }
+    }
 
+    // BULLET VS PARACHUTE
+    for (int i = 0; i < C_PAR; i++) {
+        for(int j = 0; j < count_atg; j++) {
+            if (chute_clear[i] == 0 && detect_collision(bullets[i].bounds, chutes[i].bounds)) {
+                chute_clear[i] = 1;
+            }
+        }
+    }
+
+    // BOMB VS PARACHUTE
+    for (int i = 0; i < C_PAR; i++) {
+        for(int j = 0; j < count_bomb; j++) {
+            if (chute_clear[i] == 0 && detect_collision(bombs[i].bounds, chutes[i].bounds)) {
+                chute_clear[i] = 1;
+            }
+        }
+    }
+
+    
     // 
     // 
     // 
@@ -603,6 +637,15 @@ void gen_map() {
         turrets[i] = Turret(x, SEA_LEVEL, z, COLOR_BLACK);
         turret_clear[i] = 0;
         cout << "Turret generated at " << x << ", " << z << endl;
+    }
+    
+    // Chute gen
+    for (int i = 0; i < C_VOL; i++) {
+        x = (rand() % (2*LIM)) - LIM;
+        z = (rand() % (2*LIM)) - LIM;
+        chutes[i] = Parachute(x, 20, z, COLOR_BLACK);
+        chute_clear[i] = 0;
+        cout << "Chute generated at " << x << ", " << z << endl;
     }
 
     x = rand() % (LIM/5);
