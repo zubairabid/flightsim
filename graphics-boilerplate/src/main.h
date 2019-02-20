@@ -81,6 +81,7 @@ void gen_map();
 void create_atg();
 void create_gta(int i);
 void create_bomb();
+void gen_dash();
 
 // ---- Colors ----
 extern const color_t COLOR_RED;

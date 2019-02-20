@@ -49,7 +49,10 @@ Sea see;
 Line line;
 Refuel pump;
 
-Seven digit;
+Seven life[3];
+Seven points[3];
+Seven fuel[3];
+
 
 Ring rings[C_RING];
 int ring_clear[C_RING];
@@ -209,7 +212,22 @@ void draw() {
     // Don't change unless you are sure!!
     glm::mat4 MVP;  // MVP = Projection * View * Model
 
-    digit.draw_num(st_VP, viewf);
+    // Dash render
+    int lifepercentage = (int)(ball1.life/20.0);
+    life[0].draw_num(st_VP, lifepercentage%10);
+    life[1].draw_num(st_VP, (lifepercentage/10)%10);
+    life[2].draw_num(st_VP, (lifepercentage)/100);
+    
+    int score = ball1.points;
+    points[0].draw_num(st_VP, score%10);
+    points[1].draw_num(st_VP, (score/10)%10);
+    points[2].draw_num(st_VP, (score/100));
+
+    int fuelamount = ball1.fuel/100;
+    fuel[0].draw_num(st_VP, fuelamount%10);
+    fuel[1].draw_num(st_VP, (fuelamount/10)%10);
+    fuel[2].draw_num(st_VP, (fuelamount/100));
+
 
     // Scene render
     ball1.draw(VP);
@@ -505,8 +523,8 @@ void initGL(GLFWwindow *window, int width, int height) {
     // Create the models
 
     ball1       = Ball(0, 0, COLOR_GREEN);
-    digit = Seven(0, 0, 0, 0, COLOR_BLACK);
-    std::cout << "This should be printed too" << std::endl;
+    
+    gen_dash();
     gen_map();
     
     // Create and compile our GLSL program from the shaders
@@ -528,6 +546,22 @@ void initGL(GLFWwindow *window, int width, int height) {
     cout << "RENDERER: " << glGetString(GL_RENDERER) << endl;
     cout << "VERSION: " << glGetString(GL_VERSION) << endl;
     cout << "GLSL: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << endl;
+}
+
+void gen_dash() {
+    life[2] = Seven(-2, -3, 0, 0, COLOR_BLACK);
+    life[1] = Seven(-2.5, -3, 0, 0, COLOR_BLACK);
+    life[0] = Seven(-3, -3, 0, 0, COLOR_BLACK);
+    
+    points[2] = Seven(-2, -2.5, 0, 0, COLOR_BLACK);
+    points[1] = Seven(-2.5, -2.5, 0, 0, COLOR_BLACK);
+    points[0] = Seven(-3, -2.5, 0, 0, COLOR_BLACK);
+
+    fuel[2] = Seven(-2, -2, 0, 0, COLOR_BLACK);
+    fuel[1] = Seven(-2.5, -2, 0, 0, COLOR_BLACK);
+    fuel[0] = Seven(-3, -2, 0, 0, COLOR_BLACK);
+
+
 }
 
 void gen_map() {
