@@ -10,6 +10,7 @@
 #include "atg.h"
 #include "gta.h"
 #include "bomb.h"
+#include "refuel.h"
 
 #include "common/shader.hpp"
 // #include "texture.hpp"
@@ -43,6 +44,7 @@ const int LIM = 1300;
 Ball ball1;
 Sea see;
 Line line;
+Refuel pump;
 
 Ring rings[C_RING];
 int ring_clear[C_RING];
@@ -198,6 +200,7 @@ void draw() {
     arrow.draw(VP);
     see.draw(VP);
     line.draw(VP);
+    pump.draw(VP);
     
     for (int i = 0; i < C_TURR; i++) {
         if (turret_clear[i] == 0)
@@ -368,6 +371,14 @@ void tick_elements() {
     if (ball1.life <= 0)
         dead = true;
 
+    // PLANE VS LIL PUMP
+    if (detect_collision(ball1.bounds, pump.bounds)) {
+        float x = rand() % (LIM/10);
+        float z = rand() % (LIM/10);
+        ball1.fuel+=5000;
+        pump = Refuel(x, SEA_LEVEL/2.0, z, 0, COLOR_GREEN);
+    }
+
     // VOLCANO V PLANE
     for (int i = 0; i < C_VOL; i++) {
         if (detect_collision_lite(volcanoes[i].bounds, ball1.bounds)) {
@@ -534,6 +545,10 @@ void gen_map() {
         turret_clear[i] = 0;
         cout << "Turret generated at " << x << ", " << z << endl;
     }
+
+    x = rand() % (LIM/10);
+    z = rand() % (LIM/10);
+    pump = Refuel(x, SEA_LEVEL/2.0, z, 0, COLOR_GREEN);
 
 }
 

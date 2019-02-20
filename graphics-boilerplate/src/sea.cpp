@@ -19,12 +19,12 @@ Sea::Sea(float x, float y, float z, color_t color) {
     };
 
     GLfloat vertex_colours[] = {
-        0.5f, 0.5f, 1.0f,
-        0.5f, 0.5f, 1.0f,
+        0.1f, 0.9f, 1.0f,
+        0.1f, 0.9f, 1.0f,
         1.0f, 1.0f, 1.0f,
-        0.5f, 0.5f, 1.0f,
+        0.1f, 0.9f, 1.0f,
         0.0f, 0.0f, 1.0f,
-        0.5f, 0.5f, 1.0f
+        0.1f, 0.9f, 1.0f
     };
 
     this->object = create3DObject(GL_TRIANGLES, sizeof(vertex_buffer_data), vertex_buffer_data, color, GL_FILL);

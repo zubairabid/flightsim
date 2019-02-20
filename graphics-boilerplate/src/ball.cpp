@@ -13,10 +13,10 @@ Ball::Ball(float x, float y, color_t color) {
     this->roll = 0;
     this->pitch = 0;
     this->gravity = -0.1;
-    speed = 0.4;
-    this->limit = 5000;
+    speed = 1.0;
+    this->limit = 1.0;
 
-    this->fuel = 10000;
+    this->fuel = 5000;
     this->points = 0;
     this->life = 2000;
 
@@ -216,7 +216,7 @@ void Ball::tick(int forward, int tilt, int up, int reverse) {
             this->speed -= 0.2;
     }
     else {
-        if (this->speed > 0.4)
+        if (this->speed > this->limit)
             this->speed -= 0.2;
         else 
             this->speed += 0.2;
