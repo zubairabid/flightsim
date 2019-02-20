@@ -554,17 +554,17 @@ void initGL(GLFWwindow *window, int width, int height) {
 }
 
 void gen_dash() {
-    life[2] = Seven(-2, -3, 0, 0, COLOR_BLACK);
-    life[1] = Seven(-2.5, -3, 0, 0, COLOR_BLACK);
-    life[0] = Seven(-3, -3, 0, 0, COLOR_BLACK);
+    life[2] = Seven(-2, -3.5, 0, 0, COLOR_BLACK);
+    life[1] = Seven(-2.5, -3.5, 0, 0, COLOR_BLACK);
+    life[0] = Seven(-3, -3.5, 0, 0, COLOR_BLACK);
     
-    points[2] = Seven(-2, -2.5, 0, 0, COLOR_BLACK);
-    points[1] = Seven(-2.5, -2.5, 0, 0, COLOR_BLACK);
-    points[0] = Seven(-3, -2.5, 0, 0, COLOR_BLACK);
+    points[2] = Seven(-2, -3, 0, 0, COLOR_BLACK);
+    points[1] = Seven(-2.5, -3, 0, 0, COLOR_BLACK);
+    points[0] = Seven(-3, -3, 0, 0, COLOR_BLACK);
 
-    fuel[2] = Seven(-2, -2, 0, 0, COLOR_BLACK);
-    fuel[1] = Seven(-2.5, -2, 0, 0, COLOR_BLACK);
-    fuel[0] = Seven(-3, -2, 0, 0, COLOR_BLACK);
+    fuel[2] = Seven(-2, -2.5, 0, 0, COLOR_BLACK);
+    fuel[1] = Seven(-2.5, -2.5, 0, 0, COLOR_BLACK);
+    fuel[0] = Seven(-3, -2.5, 0, 0, COLOR_BLACK);
 
     compass = Compass(2.5, -3, 0, camera_rotation_angle, COLOR_BLACK);
 }

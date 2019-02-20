@@ -7,12 +7,12 @@ Compass::Compass(float x, float y, float z, float rot, color_t color) {
     this->rotation = rot;
 
     static const GLfloat vertex_buffer_data[] = {
-        -0.2f, 0.0f, 0.0f,
-        0.2f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
-        -0.2f, 0.0f, 0.0f,
-        0.2f, 0.0f, 0.0f,
-        0.0f, -1.0f, 0.0f
+        -0.1f, 0.0f, 0.0f,
+        0.1f, 0.0f, 0.0f,
+        0.0f, 0.6f, 0.0f,
+        -0.1f, 0.0f, 0.0f,
+        0.1f, 0.0f, 0.0f,
+        0.0f, -0.6f, 0.0f
     };
 
 
