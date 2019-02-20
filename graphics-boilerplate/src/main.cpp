@@ -215,7 +215,7 @@ void draw() {
         heli_rotation_x += (x - 350);
         heli_rotation_y += (y - 350);
 
-        cout << "X: " << x << "\tY: " << y << endl;
+        // cout << "X: " << x << "\tY: " << y << endl;
     }
     // if {
     //     eye_x = ball1.position.x+80;
