@@ -12,12 +12,15 @@
 #include "bomb.h"
 #include "refuel.h"
 
+#include "seven.h"
+
 #include "common/shader.hpp"
 // #include "texture.hpp"
 
 using namespace std;
 
 GLMatrices Matrices;
+GLMatrices test;
 GLuint     programID;
 GLFWwindow *window;
 
@@ -45,6 +48,8 @@ Ball ball1;
 Sea see;
 Line line;
 Refuel pump;
+
+Seven digit;
 
 Ring rings[C_RING];
 int ring_clear[C_RING];
@@ -181,19 +186,30 @@ void draw() {
     // Up - Up vector defines tilt of camera.  Don't change unless you are sure!!
     glm::vec3 up (up_x, up_y, up_z);
 
+
+    glm::vec3 st_eye (0, 0, -10);
+    glm::vec3 st_target (0, 0, 0);
+    glm::vec3 st_up (0, 1, 0);
+
+
+
     // Compute Camera matrix (view)
     Matrices.view = glm::lookAt( eye, target, up ); // Rotating Camera for 3D
+    test.view = glm::lookAt(st_eye, st_target, st_up);
     // Don't change unless you are sure!!
     // Matrices.view = glm::lookAt(glm::vec3(0, 0, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)); // Fixed camera for 2D (ortho) in XY plane
 
     // Compute ViewProject matrix as view/camera might not be changed for this frame (basic scenario)
     // Don't change unless you are sure!!
     glm::mat4 VP = Matrices.projection * Matrices.view;
+    glm::mat4 st_VP = test.projection * test.view;
 
     // Send our transformation to the currently bound shader, in the "MVP" uniform
     // For each model you render, since the MVP will be different (at least the M part)
     // Don't change unless you are sure!!
     glm::mat4 MVP;  // MVP = Projection * View * Model
+
+    digit.draw_num(st_VP, viewf);
 
     // Scene render
     ball1.draw(VP);
@@ -489,6 +505,8 @@ void initGL(GLFWwindow *window, int width, int height) {
     // Create the models
 
     ball1       = Ball(0, 0, COLOR_GREEN);
+    digit = Seven(0, 0, 0, 0, COLOR_BLACK);
+    std::cout << "This should be printed too" << std::endl;
     gen_map();
     
     // Create and compile our GLSL program from the shaders
@@ -599,4 +617,5 @@ void reset_screen() {
     float left   = screen_center_x - 4 / screen_zoom;
     float right  = screen_center_x + 4 / screen_zoom;
     Matrices.projection = glm::perspective(glm::radians(15.0f), 1.0f/1.0f, 0.1f, 700.0f);
+    test.projection = glm::ortho(left, right, bottom, top, 1.0f, 500.0f);
 }
