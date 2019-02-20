@@ -359,8 +359,10 @@ void tick_elements() {
     // 
 
     // PLANE VS SURROUNDINGS
-    if (ball1.position.x >= LIM || ball1.position.z >= LIM || ball1.position.x <= -LIM || ball1.position.z <= -LIM)
+    if (ball1.position.x >= LIM || ball1.position.z >= LIM || ball1.position.x <= -LIM || ball1.position.z <= -LIM) {
         reverse_plane = true;
+        ball1.fuel -= 1000;
+    }
 
     // PLANE VS SEA
     if (ball1.position.y <= SEA_LEVEL) {
@@ -373,8 +375,8 @@ void tick_elements() {
 
     // PLANE VS LIL PUMP
     if (detect_collision(ball1.bounds, pump.bounds)) {
-        float x = rand() % (LIM/10);
-        float z = rand() % (LIM/10);
+        float x = rand() % (LIM/5);
+        float z = rand() % (LIM/5);
         ball1.fuel+=5000;
         pump = Refuel(x, SEA_LEVEL/2.0, z, 0, COLOR_GREEN);
     }
@@ -546,8 +548,8 @@ void gen_map() {
         cout << "Turret generated at " << x << ", " << z << endl;
     }
 
-    x = rand() % (LIM/10);
-    z = rand() % (LIM/10);
+    x = rand() % (LIM/5);
+    z = rand() % (LIM/5);
     pump = Refuel(x, SEA_LEVEL/2.0, z, 0, COLOR_GREEN);
 
 }
