@@ -19,13 +19,19 @@ Seven::Seven(float x, float y, float z, float rot, color_t color) {
     GLfloat b[] = {
         -0.11f, 0.11f, 0.0f,
         -0.08f, 0.08f, 0.0f,
-        -0.08f, 0.02f, 0.0f
+        -0.08f, 0.02f, 0.0f,
+        -0.11f, 0.11f, 0.0f,
+        -0.08f, 0.08f, 0.0f,
+        -0.11f, 0.02f, 0.0f
     };
 
     GLfloat c[] = {
         -0.11f, -0.11f, 0.0f,
         -0.08f, -0.08f, 0.0f,
-        -0.08f, -0.02f, 0.0f
+        -0.08f, -0.02f, 0.0f,
+        -0.11f, -0.11f, 0.0f,
+        -0.08f, -0.08f, 0.0f,
+        -0.11f, -0.02f, 0.0f
     };
 
     GLfloat d[] = {
@@ -40,13 +46,19 @@ Seven::Seven(float x, float y, float z, float rot, color_t color) {
     GLfloat e[] = {
         0.11f, -0.11f, 0.0f,
         0.08f, -0.08f, 0.0f,
-        0.08f, -0.02f, 0.0f
+        0.08f, -0.02f, 0.0f,
+        0.11f, -0.11f, 0.0f,
+        0.08f, -0.08f, 0.0f,
+        0.11f, -0.02f, 0.0f
     };
 
     GLfloat f[] = {
         0.11f, 0.11f, 0.0f,
         0.08f, 0.08f, 0.0f,
-        0.08f, 0.02f, 0.0f
+        0.08f, 0.02f, 0.0f,
+        0.11f, 0.11f, 0.0f,
+        0.08f, 0.08f, 0.0f,
+        0.11f, 0.02f, 0.0f
     };
 
     GLfloat g[] = {
