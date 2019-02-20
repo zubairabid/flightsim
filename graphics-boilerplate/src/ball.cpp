@@ -29,7 +29,7 @@ Ball::Ball(float x, float y, color_t color) {
     this->TextureID = glGetUniformLocation(programID, "myTextureSampler");
 
     std::cout << "About to load\n";
-    bool res = loadOBJ("../../plane3_1.obj", this->vertices, this->uvs, this->normals);
+    bool res = loadOBJ("../plane3_1.obj", this->vertices, this->uvs, this->normals);
 
 
     // NOT SURE WHY IT IS IMPORTANT BUT DOES NOT RENDER OTHERWISE
